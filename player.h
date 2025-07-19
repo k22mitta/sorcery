@@ -1,0 +1,40 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
+#include <string>
+#include <vector>
+#include <memory>
+#include "card.h"
+
+class Player {
+    std::string name;
+    int id;
+    int life = 20;
+    int magic = 3;
+    std::vector<std::unique_ptr<Card>> hand;
+    std::vector<std::unique_ptr<Card>> deck;
+    std::vector<std::unique_ptr<Card>> graveyard;
+    std::vector<std::unique_ptr<Card>> board; // size <= 5
+    std::unique_ptr<Card> ritual;
+
+public:
+    Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck);
+
+    void drawCard();
+    void drawInitialHand();
+    void playCard(int index);
+    void startTurn();
+    void endTurn();
+
+    const std::string &getName() const;
+    int getLife() const;
+    int getMagic() const;
+    void changeLife(int delta);
+    void changeMagic(int delta);
+    std::vector<std::unique_ptr<Card>> &getHand();
+    std::vector<std::unique_ptr<Card>> &getBoard();
+    Card *getRitual();
+    Card *getGraveyardTop();
+};
+
+#endif
