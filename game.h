@@ -12,10 +12,12 @@ class Game {
     int currentPlayer = 1;
     bool testingMode = false;
     bool graphicsEnabled = false;
+    std::string deckFile1;
+    std::string deckFile2;
     std::string initFile;
 
 public:
-    Game(bool testing = false, bool graphics = false);
+    Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2);
     void init(const std::string &initFile = "");
     void start();
     void nextTurn();
