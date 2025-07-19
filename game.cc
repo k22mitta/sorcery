@@ -4,8 +4,8 @@
 #include <fstream>
 #include <sstream>
 
-Game::Game(bool testing = false, bool graphics = false)
-    : testingMode{testing}, graphicsEnabled{graphics} { }
+Game::Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2)
+    : testingMode{testing}, graphicsEnabled{graphics}, deckFile1{deckFile1}, deckFile2{deckFile2} { }
 
 void Game::init(const std::string &initFile) {
     this->initFile = initFile;
@@ -20,8 +20,8 @@ void Game::init(const std::string &initFile) {
     std::getline(*in, name1);
     std::getline(*in, name2);
 
-    auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck("default.deck"));
-    auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck("default.deck"));
+    auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
+    auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
 
     std::string cmd;
