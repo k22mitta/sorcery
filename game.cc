@@ -4,8 +4,8 @@
 #include <fstream>
 #include <sstream>
 
-Game::Game(bool testing, bool graphics)
-    : testingMode{testing}, graphicsEnabled{graphics} {}
+Game::Game(bool testing = false, bool graphics = false)
+    : testingMode{testing}, graphicsEnabled{graphics} { }
 
 void Game::init(const std::string &initFile) {
     this->initFile = initFile;
