@@ -22,6 +22,10 @@ void Game::init(const std::string &initFile) {
 
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
     auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
+
+    p1->shuffleDeck(testingMode);
+    p2->shuffleDeck(testingMode);
+
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
 
     std::string cmd;

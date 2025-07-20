@@ -1,5 +1,8 @@
 #include "player.h"
 #include <iostream>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
 Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
     : name{name}, id{id}, deck{std::move(deck)} {}
@@ -31,6 +34,14 @@ void Player::startTurn() {
 void Player::endTurn() {
     std::cout << name << " ends turn.\n";
     // TODO: Trigger end-of-turn effects
+}
+
+void Player::shuffleDeck(bool testingMode, unsigned seed) {
+    if (!testingMode) {
+        seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
+    std::default_random_engine rng{seed};
+    std::shuffle(deck.begin(), deck.end(), rng);
 }
 
 const std::string &Player::getName() const { return name; }
