@@ -13,7 +13,7 @@ class Enchantment : public Minion {
     int newDefense = 0;
 
 public:
-    Enchantment(const std::string &name, const std::string &description,int cost, std::unique_ptr<Minion> target);
+    Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target);
 
     CardType getType() const override;
     void display(std::ostream &out) const override;

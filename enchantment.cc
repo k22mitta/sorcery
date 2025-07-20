@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 
-Enchantment::Enchantment(const std::string &name, const std::string &description, int cost, std::unique_ptr<Minion> target)
-    : Minion{name, description, cost, 0, 0}, target{std::move(target)} {}
+Enchantment::Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target)
+    : Minion{name, cost, 0, 0}, target{std::move(target)} {}
 
 CardType Enchantment::getType() const {
     return CardType::Enchantment;

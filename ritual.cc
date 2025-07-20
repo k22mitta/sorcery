@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 
-Ritual::Ritual(const std::string &name, const std::string &description, int cost, int activationCost, int charges)
-    : Card{name, description, cost}, activationCost{activationCost}, charges{charges} {}
+Ritual::Ritual(const std::string &name, int cost, int activationCost, int charges)
+    : Card{name, cost}, activationCost{activationCost}, charges{charges} {}
 
 CardType Ritual::getType() const { return CardType::Ritual; }
 
