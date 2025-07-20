@@ -8,7 +8,7 @@ class Ritual : public Card {
     int charges;
 
 public:
-    Ritual(const std::string &name, int cost, int activationCost, int charges);
+    Ritual(const std::string &name, const std::string &description, int cost, int activationCost, int charges);
 
     CardType getType() const override;
     void display(std::ostream &out) const override;

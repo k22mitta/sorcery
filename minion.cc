@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 
-Minion::Minion(const std::string &name, int cost, int atk, int def)
-    : Card{name, cost}, atk{atk}, def{def}, actions{0} {}
+Minion::Minion(const std::string &name, const std::string &description, int cost, int atk, int def)
+    : Card{name, description, cost}, atk{atk}, def{def}, actions{0} {}
 
 CardType Minion::getType() const { return CardType::Minion; }
 

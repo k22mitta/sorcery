@@ -9,7 +9,7 @@ class Minion : public Card {
     int actions;
 
 public:
-    Minion(const std::string &name, int cost, int atk, int def);
+    Minion(const std::string &name, const std::string &description, int cost, int atk, int def);
 
     CardType getType() const override;
     void display(std::ostream &out) const override;

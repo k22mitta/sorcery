@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 
-Spell::Spell(const std::string &name, int cost) : Card{name, cost} {}
+Spell::Spell(const std::string &name, const std::string &description, int cost) : Card{name, description, cost} {}
 
 CardType Spell::getType() const { return CardType::Spell; }
 
