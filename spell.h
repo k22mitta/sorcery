@@ -9,8 +9,49 @@ class Spell : public Card {
 public:
     Spell(const std::string &name, int cost);
     CardType getType() const override;
-    void display(std::ostream &out) const override;
     virtual void effect(Game &game, int targetPlayer = -1, int targetCard = -1) = 0;
+};
+
+class Banish : public Spell {
+public:
+    Banish();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
+};
+
+class Unsummon : public Spell {
+public:
+    Unsummon();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
+};
+
+class Recharge : public Spell {
+public:
+    Recharge();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
+};
+
+class Disenchant : public Spell {
+public:
+    Disenchant();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
+};
+
+class RaiseDead : public Spell {
+public:
+    RaiseDead();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
+};
+
+class Blizzard : public Spell {
+public:
+    Blizzard();
+    void display(std::ostream &out) const override;
+    void effect(Game &game, int targetPlayer = -1, int targetCard = -1) override;
 };
 
 #endif
