@@ -53,3 +53,9 @@ std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
 Card *Player::getRitual() { return ritual.get(); }
 Card *Player::getGraveyardTop() { return graveyard.empty() ? nullptr : graveyard.back().get(); }
+
+void Player::displayHand() const {
+    for (auto& c : hand) {
+        std::cout << c -> getName() << std::endl;
+    }
+}
