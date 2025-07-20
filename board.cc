@@ -12,6 +12,16 @@ Player &Board::getOpponent(int id) {
     return (id == 1) ? *player2 : *player1;
 }
 
+void Board::attach(Display* observer) {
+        observers.emplace_back(observer);
+}
+
+void Board::notifyObservers() const {
+    for (auto* obs : observers) {
+        obs->notify(*this);
+    }
+}
+
 void Board::display() const {
     // Placeholder for now
     std::cout << "Displaying board state...\n";

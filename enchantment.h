@@ -18,12 +18,6 @@ public:
     CardType getType() const override;
     void display(std::ostream &out) const override;
 
-    int getAttack() const override;
-    int getDefense() const override;
-    void restoreAction() override;
-    bool canAct() const override;
-    void spendAction() override;
-
     void setStatOverride(int atk, int def);
     void setStatModifier(int atkDelta, int defDelta);
 

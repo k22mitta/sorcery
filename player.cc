@@ -1,5 +1,8 @@
 #include "player.h"
 #include <iostream>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
 Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
     : name{name}, id{id}, deck{std::move(deck)} {}
@@ -33,6 +36,14 @@ void Player::endTurn() {
     // TODO: Trigger end-of-turn effects
 }
 
+void Player::shuffleDeck(bool testingMode, unsigned seed) {
+    if (!testingMode) {
+        seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
+    std::default_random_engine rng{seed};
+    std::shuffle(deck.begin(), deck.end(), rng);
+}
+
 const std::string &Player::getName() const { return name; }
 int Player::getLife() const { return life; }
 int Player::getMagic() const { return magic; }
@@ -42,3 +53,9 @@ std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
 Card *Player::getRitual() { return ritual.get(); }
 Card *Player::getGraveyardTop() { return graveyard.empty() ? nullptr : graveyard.back().get(); }
+
+void Player::displayHand() const {
+    for (auto& c : hand) {
+        std::cout << c -> getName() << std::endl;
+    }
+}

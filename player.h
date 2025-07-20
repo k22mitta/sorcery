@@ -25,6 +25,7 @@ public:
     void playCard(int index);
     void startTurn();
     void endTurn();
+    void shuffleDeck(bool testingMode, unsigned seed);
 
     const std::string &getName() const;
     int getLife() const;
@@ -35,6 +36,8 @@ public:
     std::vector<std::unique_ptr<Card>> &getBoard();
     Card *getRitual();
     Card *getGraveyardTop();
+
+    void displayHand() const;
 };
 
 #endif

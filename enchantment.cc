@@ -14,28 +14,6 @@ void Enchantment::display(std::ostream &out) const {
     out << "| Enchantment applied: " << name << "\n";
 }
 
-int Enchantment::getAttack() const {
-    if (overrideStats) return newAttack;
-    return target->getAttack() + attackModifier;
-}
-
-int Enchantment::getDefense() const {
-    if (overrideStats) return newDefense;
-    return target->getDefense() + defenseModifier;
-}
-
-bool Enchantment::canAct() const {
-    return target->canAct();
-}
-
-void Enchantment::restoreAction() {
-    target->restoreAction();
-}
-
-void Enchantment::spendAction() {
-    target->spendAction();
-}
-
 void Enchantment::setStatOverride(int atk, int def) {
     overrideStats = true;
     newAttack = atk;
