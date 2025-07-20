@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 
-Enchantment::Enchantment(const std::string &name, int cost, std::unique_ptr<Card> target)
-    : Card{name, cost}, target{std::move(target)} {}
+Enchantment::Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target)
+    : Minion{name, cost, 0, 0}, target{std::move(target)} {}
 
 CardType Enchantment::getType() const {
     return CardType::Enchantment;
@@ -16,16 +16,24 @@ void Enchantment::display(std::ostream &out) const {
 
 int Enchantment::getAttack() const {
     if (overrideStats) return newAttack;
-    Minion *minion = dynamic_cast<Minion *>(target.get());
-    if (minion) return minion->getAttack() + attackModifier;
-    return 0;
+    return target->getAttack() + attackModifier;
 }
 
 int Enchantment::getDefense() const {
     if (overrideStats) return newDefense;
-    Minion *minion = dynamic_cast<Minion *>(target.get());
-    if (minion) return minion->getDefense() + defenseModifier;
-    return 0;
+    return target->getDefense() + defenseModifier;
+}
+
+bool Enchantment::canAct() const {
+    return target->canAct();
+}
+
+void Enchantment::restoreAction() {
+    target->restoreAction();
+}
+
+void Enchantment::spendAction() {
+    target->spendAction();
 }
 
 void Enchantment::setStatOverride(int atk, int def) {
@@ -39,6 +47,7 @@ void Enchantment::setStatModifier(int atkDelta, int defDelta) {
     defenseModifier = defDelta;
 }
 
-Card &Enchantment::getBase() {
+Minion &Enchantment::getBase() {
     return *target;
 }
+
