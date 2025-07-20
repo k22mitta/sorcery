@@ -15,6 +15,7 @@ class Game {
     std::string deckFile1;
     std::string deckFile2;
     std::string initFile;
+    void helpMsg() const;
 
 public:
     Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2);

@@ -4,6 +4,19 @@
 #include <fstream>
 #include <sstream>
 
+void Game::helpMsg() const {
+    std::cout << "Commands: help -- Display this message." << std::endl;
+    std::cout << "          end  -- End the current player's turn." << std::endl;
+    std::cout << "          quit -- End the game." << std::endl;
+    std::cout << "          attack minion other-minion -- Orders minion to attack other-minion." << std::endl;
+    std::cout << "          attack minion -- Orders minion to attack the opponent." << std::endl;
+    std::cout << "          play card [target-player target-card] -- Play card, optionally targeting target-card owned by target-player." << std::endl;
+    std::cout << "          use minion [target-player target-card] -- Use minion's special ability, optionally targeting target-card owned by target-player." << std::endl;
+    std::cout << "          inspect minion -- View a minion's card and all enchantments on that minion." << std::endl;
+    std::cout << "          hand -- Describe all cards in your hand." << std::endl;
+    std::cout << "          board -- Describe all cards on the board." << std::endl;
+}
+
 Game::Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2)
     : testingMode{testing}, graphicsEnabled{graphics}, deckFile1{deckFile1}, deckFile2{deckFile2} { }
 
@@ -55,8 +68,28 @@ void Game::nextTurn() {
 }
 
 void Game::processCommand(const std::string &cmd) {
-    std::cout << "Received command: " << cmd << std::endl;
-    // TODO: Implement actual command parsing and dispatch
+
+    Player& currentPlayer = getCurrentPlayer();
+
+    if (cmd == "help") {
+        helpMsg();
+    } else if (cmd == "end") {
+
+    } else if (cmd == "quit") {
+        std::exit(EXIT_SUCCESS);
+    } else if (cmd == "attack") {
+
+    } else if (cmd == "play") {
+
+    } else if (cmd == "inspect") {
+
+    } else if (cmd == "hand") {
+
+    } else if (cmd == "board") {
+
+    } else {
+        std::cerr << "Unknown command." << std::endl;
+    }
 }
 
 Player &Game::getCurrentPlayer() {
