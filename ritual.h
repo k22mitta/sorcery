@@ -17,6 +17,23 @@ public:
     void addCharges(int n);
     bool canActivate() const;
     void consumeCharge();
+
+    virtual void trigger(Game &game) = 0;
+};
+
+class DarkRitual : public Ritual {
+public:
+    void trigger(Game &game) override;
+};
+
+class AuraOfPower : public Ritual {
+public:
+    void trigger(Game &game) override;
+};
+
+class StandStill : public Ritual {
+public:
+    void trigger(Game &game) override;
 };
 
 #endif
