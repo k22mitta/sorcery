@@ -22,7 +22,7 @@ public:
     void init(const std::string &initFile = "");
     void start();
     void nextTurn();
-    void processCommand(const std::string &cmd);
+    void processCommand(const std::string &line);
     Player &getCurrentPlayer();
     Player &getOtherPlayer();
     bool isTestingMode() const;

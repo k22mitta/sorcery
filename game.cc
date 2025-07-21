@@ -36,14 +36,14 @@ void Game::init(const std::string &initFile) {
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
     auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
 
-    p1->shuffleDeck(testingMode, 12345);
-    p2->shuffleDeck(testingMode, 12345);
+    p1->shuffleAndDraw(5, testingMode, 12345);
+    p2->shuffleAndDraw(5, testingMode, 12345);
 
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
 
-    std::string cmd;
-    while (std::getline(*in, cmd)) {
-        processCommand(cmd);
+    std::string line;
+    while (std::getline(*in, line)) {
+        processCommand(line);
     }
 }
 
@@ -59,32 +59,46 @@ void Game::nextTurn() {
     p.startTurn();
     board->display();
 
-    std::string cmd;
-    while (std::getline(std::cin, cmd)) {
-        if (cmd == "end") break;
-        processCommand(cmd);
+    std::string line;
+    while (std::getline(std::cin, line)) {
+        if (line == "end") break;
+        processCommand(line);
     }
     p.endTurn();
 }
 
-void Game::processCommand(const std::string &cmd) {
-
+void Game::processCommand(const std::string &line) {
     Player& currentPlayer = getCurrentPlayer();
+    std::istringstream iss{line};
+    std::string cmd;
+    iss >> cmd;
 
     if (cmd == "help") {
         helpMsg();
-    } else if (cmd == "end") {
-
     } else if (cmd == "quit") {
         std::exit(EXIT_SUCCESS);
     } else if (cmd == "attack") {
-
+        int i, j = -1;
+        if (iss >> i) {
+            if (!(iss >> j)) {
+                j = -1;
+            }
+            currentPlayer.attack(i, j, getOtherPlayer());
+        }
     } else if (cmd == "play") {
-
+        int i, p = -1, t = -1;
+        if (iss >> i) {
+            if (iss >> p) {
+                if (!(iss >> t)) {
+                    t = -1;
+                }
+            }
+            currentPlayer.playCard(i, p, t);
+        }
     } else if (cmd == "inspect") {
 
     } else if (cmd == "hand") {
-
+        currentPlayer.displayHand();
     } else if (cmd == "board") {
 
     } else {

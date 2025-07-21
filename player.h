@@ -22,12 +22,13 @@ public:
 
     void drawCard();
     void drawInitialHand();
-    void playCard(int index);
+    void playCard(int index, int targetPlayer, int targetCard);
+    void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
-    void shuffleDeck(bool testingMode, unsigned seed);
+    void shuffleAndDraw(int numCards, bool testingMode, unsigned seed);
 
-    const std::string &getName() const;
+    std::string getName() const;
     int getLife() const;
     int getMagic() const;
     void changeLife(int delta);
