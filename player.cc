@@ -22,6 +22,7 @@ void Player::drawInitialHand() {
 void Player::playCard(int index, int targetPlayer, int targetCard) {
     if (index < 1 || index > static_cast<int>(hand.size())) {
         std::cerr << "Invalid hand index" << std::endl;
+        return;
     }
     auto &currentCard = hand[index - 1];
     if (currentCard->getCost() > magic) {
@@ -99,6 +100,14 @@ void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
     for (int i = 0; i < numCards && hand.size() < 5 && !deck.empty(); i++) {
         hand.emplace_back(std::move(deck.back()));
         deck.pop_back();
+    }
+
+    for (auto it = deck.begin(); it != deck.end(); ++it) {
+        if ((*it)->getType() == CardType::Ritual) {
+            ritual = std::move(*it);
+            deck.erase(it);
+            break;
+        }
     }
 }
 
