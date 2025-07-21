@@ -36,15 +36,20 @@ void Player::endTurn() {
     // TODO: Trigger end-of-turn effects
 }
 
-void Player::shuffleDeck(bool testingMode, unsigned seed) {
+void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
     if (!testingMode) {
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::default_random_engine rng{seed};
     std::shuffle(deck.begin(), deck.end(), rng);
+
+    for (int i = 0; i < numCards && hand.size() < 5 && !deck.empty(); i++) {
+        hand.emplace_back(std::move(deck.back()));
+        deck.pop_back();
+    }
 }
 
-const std::string &Player::getName() const { return name; }
+std::string Player::getName() const { return name; }
 int Player::getLife() const { return life; }
 int Player::getMagic() const { return magic; }
 void Player::changeLife(int delta) { life += delta; }
@@ -56,6 +61,6 @@ Card *Player::getGraveyardTop() { return graveyard.empty() ? nullptr : graveyard
 
 void Player::displayHand() const {
     for (auto& c : hand) {
-        std::cout << c -> getName() << std::endl;
+        c -> display(std::cout);
     }
 }

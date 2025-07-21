@@ -36,8 +36,8 @@ void Game::init(const std::string &initFile) {
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
     auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
 
-    p1->shuffleDeck(testingMode, 12345);
-    p2->shuffleDeck(testingMode, 12345);
+    p1->shuffleAndDraw(5, testingMode, 12345);
+    p2->shuffleAndDraw(5, testingMode, 12345);
 
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
 
@@ -84,7 +84,7 @@ void Game::processCommand(const std::string &cmd) {
     } else if (cmd == "inspect") {
 
     } else if (cmd == "hand") {
-
+        currentPlayer.displayHand();
     } else if (cmd == "board") {
 
     } else {

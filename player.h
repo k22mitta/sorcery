@@ -25,9 +25,9 @@ public:
     void playCard(int index);
     void startTurn();
     void endTurn();
-    void shuffleDeck(bool testingMode, unsigned seed);
+    void shuffleAndDraw(int numCards, bool testingMode, unsigned seed);
 
-    const std::string &getName() const;
+    std::string getName() const;
     int getLife() const;
     int getMagic() const;
     void changeLife(int delta);
