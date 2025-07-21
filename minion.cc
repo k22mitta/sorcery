@@ -30,3 +30,6 @@ void Minion::modifyStats(int atkDelta, int defDelta) { atk += atkDelta; def += d
 bool Minion::canAct() const { return actions > 0; }
 void Minion::restoreAction() { actions = 1; }
 void Minion::spendAction() { if (actions > 0) --actions; }
+
+Ability* Minion::getAbility() { return ability.get(); }
+void Minion::setAbility(std::unique_ptr<Ability> ability) { this -> ability = std::move(ability); }
