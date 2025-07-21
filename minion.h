@@ -1,13 +1,13 @@
 #ifndef MINION_H
 #define MINION_H
 
-#include "ability.h"
 #include "card.h"
+#include "ability.h"
+#include <memory>
 
 class Minion : public Card {
-    int atk;
-    int def;
-    int actions;
+    int atk, def;
+    int actions = 1;
     std::unique_ptr<Ability> ability;
 
 public:
@@ -18,16 +18,12 @@ public:
 
     int getAttack() const;
     int getDefense() const;
-    void setAttack(int val);
-    void setDefense(int val);
-    void modifyStats(int atkDelta, int defDelta);
-
     bool canAct() const;
     void restoreAction();
     void spendAction();
 
-    virtual Ability *getAbility();
-    void setAbility(std::unique_ptr<Ability> ability);
+    void setAbility(std::unique_ptr<Ability> a);
+    Ability *getAbility() const;
 };
 
 #endif
