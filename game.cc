@@ -67,9 +67,11 @@ void Game::nextTurn() {
     p.endTurn();
 }
 
-void Game::processCommand(const std::string &cmd) {
-
+void Game::processCommand(const std::string &line) {
     Player& currentPlayer = getCurrentPlayer();
+    std::istringstream iss{line};
+    std::string cmd;
+    iss >> cmd;
 
     if (cmd == "help") {
         helpMsg();
@@ -78,9 +80,23 @@ void Game::processCommand(const std::string &cmd) {
     } else if (cmd == "quit") {
         std::exit(EXIT_SUCCESS);
     } else if (cmd == "attack") {
-
+        int i, j = -1;
+        if (iss >> i) {
+            if (!(iss >> j)) {
+                j = -1;
+            }
+            currentPlayer.attack(i, j, getOtherPlayer());
+        }
     } else if (cmd == "play") {
-
+        int i, p = -1, t = -1;
+        if (iss >> i) {
+            if (iss >> p) {
+                if (!(iss >> t)) {
+                    t = -1;
+                }
+            }
+            currentPlayer.playCard(i, p, t);
+        }
     } else if (cmd == "inspect") {
 
     } else if (cmd == "hand") {

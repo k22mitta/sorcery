@@ -1,4 +1,5 @@
 #include "player.h"
+#include "minion.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -15,13 +16,65 @@ void Player::drawCard() {
 }
 
 void Player::drawInitialHand() {
-    for (int i = 0; i < 5; ++i) drawCard();
+    for (int i = 0; i < 5; i++) drawCard();
 }
 
-void Player::playCard(int index) {
-    if (index < 1 || index > static_cast<int>(hand.size())) return;
-    std::cout << name << " plays card " << index << std::endl;
-    // TODO: Implement actual card play logic
+void Player::playCard(int index, int targetPlayer, int targetCard) {
+    if (index < 1 || index > static_cast<int>(hand.size())) {
+        std::cerr << "Invalid hand index" << std::endl;
+    }
+    auto &currentCard = hand[index - 1];
+    if (currentCard->getCost() > magic) {
+        std::cout << "No enough magic " << std::endl;
+        return;
+    }
+    changeMagic(-currentCard->getCost());
+    switch (currentCard->getType()) {
+        case CardType::Minion:
+            if (board.size() >= 5) {
+                std::cout << "Board full!" << std::endl;
+                return;
+            }
+            std::cout << name << " placed " << currentCard->getName() << std::endl;
+            board.emplace_back(std::move(currentCard));
+            break;
+
+        case CardType::Spell:
+            break;
+
+        case CardType::Ritual:
+            break;
+
+        case CardType::Enchantment:
+            break;
+    }
+    hand.erase(hand.begin() + (index - 1));
+}
+
+void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
+    if (whoAttack < 1 || whoAttack > static_cast<int>(board.size())) {
+        std::cout << "Invalid attacker" << std::endl;
+        return;
+    }
+    Card *attackCard = board[whoAttack - 1].get();
+    Minion *attacker = dynamic_cast<Minion*>(attackCard);
+    if (!attacker->canAct()) {
+        std::cout << attacker->getName() << " cannot act" << std::endl;
+        return;
+    }
+    attacker->spendAction();
+    if (whoAttacked == -1) {
+        std::cout << "attacks opponent directly" << std::endl;
+        // TODO: Apply attacktion to opponent player
+    } else {
+        if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.getBoard().size())) {
+            std::cout << "Invalid target minion index" << std::endl;
+            return;
+        }
+        Card *targetCard = opponent.getBoard()[whoAttacked - 1].get();
+        Minion *target = dynamic_cast<Minion*>(targetCard);
+        // TODO: Apply combat logic
+    }
 }
 
 void Player::startTurn() {

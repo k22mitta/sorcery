@@ -22,7 +22,8 @@ public:
 
     void drawCard();
     void drawInitialHand();
-    void playCard(int index);
+    void playCard(int index, int targetPlayer, int targetCard);
+    void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
     void shuffleAndDraw(int numCards, bool testingMode, unsigned seed);
