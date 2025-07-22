@@ -66,8 +66,7 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
     }
     attacker->spendAction();
     if (whoAttacked == -1) {
-        std::cout << "attacks opponent directly" << std::endl;
-        // TODO: Apply attacktion to opponent player
+        opponent.changeLife(-attacker->getAttack());
     } else {
         if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.getBoard().size())) {
             std::cout << "Invalid target minion index" << std::endl;
@@ -75,7 +74,22 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
         }
         Card *targetCard = opponent.getBoard()[whoAttacked - 1].get();
         Minion *target = dynamic_cast<Minion*>(targetCard);
-        // TODO: Apply combat logic
+        if (!target) {
+            std::cout << "Target card is not a minion" << std::endl;
+            return;
+        }
+        
+        attacker->setDefense(attacker->getDefense() - target->getAttack());
+        target->setDefense(target->getDefense() - attacker->getAttack());
+
+        if (attacker->getDefense() <= 0) {
+            graveyard.emplace_back(std::move(board[whoAttack - 1]));
+            board.erase(board.begin() + (whoAttack - 1));
+        }
+        if (target->getDefense() <= 0) {
+            opponent.getGraveyard().emplace_back(std::move(opponent.getBoard()[whoAttacked - 1]));
+            opponent.getBoard().erase(opponent.getBoard().begin() + (whoAttacked - 1));
+        }
     }
 }
 
@@ -83,7 +97,15 @@ void Player::startTurn() {
     magic++;
     drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
-    // TODO: Trigger start-of-turn effects
+    for (auto &card : board) {
+        Minion* minion = dynamic_cast<Minion*>(card.get());
+        if (minion) {
+            minion->restoreAction();
+        }
+    }
+    if (ritual) {
+        // TODO: ritual logic
+    }
 }
 
 void Player::endTurn() {
@@ -116,8 +138,8 @@ std::shared_ptr<Ritual> Player::getRitual() const {
     return ritual;
 }
 
-std::shared_ptr<Card> Player::getGraveyard() const {
-    return graveyard.empty() ? nullptr : graveyard.back();
+std::vector<std::shared_ptr<Card>> &Player::getGraveyard() {
+    return graveyard;
 }
 
 const std::vector<std::shared_ptr<Minion>> &Player::getMinions() const {
