@@ -16,11 +16,12 @@ void Player::drawCard() {
 }
 
 void Player::drawInitialHand() {
-    for (int i = 0; i < 5; i++) drawCard();
+    for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
 }
 
 void Player::playCard(int index, int targetPlayer, int targetCard) {
     if (index < 1 || index > static_cast<int>(hand.size())) {
+        std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
     }
@@ -95,9 +96,15 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
 
 void Player::startTurn() {
     magic++;
-    drawCard();
+    shuffleAndDraw(false, 12345);
     std::cout << name << " starts turn with " << magic << " magic.\n";
-    // TODO: Trigger start-of-turn effects
+
+    for (auto& card : board) {
+        Minion* minion = dynamic_cast<Minion*>(card.get());
+        if (minion) {
+            minion->restoreAction();
+        }
+    }
 }
 
 void Player::endTurn() {
@@ -105,14 +112,14 @@ void Player::endTurn() {
     // TODO: Trigger end-of-turn effects
 }
 
-void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
+void Player::shuffleAndDraw(bool testingMode, unsigned seed) {
     if (!testingMode) {
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::default_random_engine rng{seed};
     std::shuffle(deck.begin(), deck.end(), rng);
 
-    for (int i = 0; i < numCards && hand.size() < 5 && !deck.empty(); i++) {
+    if (!deck.empty() && hand.size() < 5) {
         hand.emplace_back(std::move(deck.back()));
         deck.pop_back();
     }
@@ -140,4 +147,49 @@ void Player::displayHand() const {
     for (auto& c : hand) {
         c -> display(std::cout);
     }
+}
+
+void Player::displayAll() const {
+    std::cout << "=== " << name << " ===" << std::endl;
+
+    std::cout << "Life: " << life << " | Magic: " << magic << std::endl;
+
+    std::cout << "--- Hand ---" << std::endl;
+    if (hand.empty()) {
+        std::cout << "(Empty)" << std::endl;
+    } else {
+        for (size_t i = 0; i < hand.size(); ++i) {
+            std::cout << "[" << (i + 1) << "] ";
+            hand[i]->display(std::cout);
+        }
+    }
+
+    std::cout << "--- Board ---" << std::endl;
+    if (board.empty()) {
+        std::cout << "(Empty)" << std::endl;
+    } else {
+        for (size_t i = 0; i < board.size(); ++i) {
+            std::cout << "[" << (i + 1) << "] ";
+            board[i]->display(std::cout);
+        }
+    }
+
+    std::cout << "--- Ritual ---" << std::endl;
+    if (ritual) {
+        ritual->display(std::cout);
+    } else {
+        std::cout << "(None)" << std::endl;
+    }
+
+    std::cout << "--- Graveyard ---" << std::endl;
+    if (graveyard.empty()) {
+        std::cout << "(Empty)" << std::endl;
+    } else {
+        for (size_t i = 0; i < graveyard.size(); ++i) {
+            std::cout << "[" << (i + 1) << "] ";
+            graveyard[i]->display(std::cout);
+        }
+    }
+
+    std::cout << "==============" << std::endl;
 }

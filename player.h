@@ -26,7 +26,7 @@ public:
     void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
-    void shuffleAndDraw(int numCards, bool testingMode, unsigned seed);
+    void shuffleAndDraw(bool testingMode, unsigned seed);
 
     std::string getName() const;
     int getLife() const;
@@ -39,6 +39,7 @@ public:
     Card *getRitual();
 
     void displayHand() const;
+    void displayAll() const;
 };
 
 #endif
