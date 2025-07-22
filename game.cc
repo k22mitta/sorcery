@@ -45,19 +45,16 @@ void Game::init(const std::string &initFile) {
 
 void Game::start() {
     while (true) {
-        currentPlayer = (currentPlayer == 1 ? 2 : 1);
         Player &p = getCurrentPlayer();
         p.startTurn();
         // board->display();
-        getCurrentPlayer().displayAll();
-        getOtherPlayer().displayAll();
-
         std::string cmd;
         while (std::getline(std::cin, cmd)) {
             if (cmd == "end") break;
             processCommand(cmd);
         }
         p.endTurn();
+        togglePlayer();
     }
 }
 
@@ -96,7 +93,8 @@ void Game::processCommand(const std::string &line) {
     } else if (cmd == "hand") {
         currentPlayer.displayHand();
     } else if (cmd == "board") {
-
+        getCurrentPlayer().displayAll();
+        getOtherPlayer().displayAll();
     } else {
         std::cerr << "Unknown command." << std::endl;
     }
@@ -108,6 +106,10 @@ Player &Game::getCurrentPlayer() {
 
 Player &Game::getOtherPlayer() {
     return board->getOpponent(currentPlayer);
+}
+
+void Game::togglePlayer() {
+    currentPlayer = (currentPlayer == 1) ? 2 : 1;
 }
 
 bool Game::isTestingMode() const {

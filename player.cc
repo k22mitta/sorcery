@@ -42,13 +42,16 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             break;
 
         case CardType::Spell:
-            break;
+            std::cout << "spell is not allowed to be played on board" << std::endl;
+            return;
 
         case CardType::Ritual:
+            ritual = std::move(currentCard);
             break;
 
         case CardType::Enchantment:
-            break;
+            std::cout << "enchantment is not allowed to be played on board" << std::endl;
+            return;
     }
     hand.erase(hand.begin() + (index - 1));
 }
