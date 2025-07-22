@@ -1,5 +1,6 @@
 #include "player.h"
 #include "minion.h"
+#include "display.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
