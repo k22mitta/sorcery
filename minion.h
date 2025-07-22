@@ -14,7 +14,7 @@ public:
     Minion(const std::string &name, int cost, int atk, int def);
 
     CardType getType() const override;
-    void display(std::ostream &out) const override;
+    void display(int line) const override;
 
     int getAttack() const;
     int getDefense() const;

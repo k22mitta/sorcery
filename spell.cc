@@ -13,77 +13,23 @@ Disenchant::Disenchant(): Spell{"Disenchant", 1} {}
 RaiseDead::RaiseDead(): Spell{"Raise Dead", 1} {}
 Blizzard::Blizzard(): Spell{"Blizzard", 3} {}
 
-void Banish::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void Banish::display(int line) const {
+
 }
-void Unsummon::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void Unsummon::display(int line) const {
+
 }
-void Recharge::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void Recharge::display(int line) const {
+
 }
-void Disenchant::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void Disenchant::display(int line) const {
+
 }
-void RaiseDead::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void RaiseDead::display(int line) const {
+
 }
-void Blizzard::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Spell" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "| <effect description here>     |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|-------------------------------|\n";
+void Blizzard::display(int line) const {
+
 }
 
 void Banish::effect(Game &game, int targetPlayer, int targetCard) {

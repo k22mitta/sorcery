@@ -47,7 +47,6 @@ void Game::start() {
     while (true) {
         Player &p = getCurrentPlayer();
         p.startTurn();
-        // board->display();
         std::string cmd;
         while (std::getline(std::cin, cmd)) {
             if (cmd == "end") break;
@@ -93,8 +92,7 @@ void Game::processCommand(const std::string &line) {
     } else if (cmd == "hand") {
         currentPlayer.displayHand();
     } else if (cmd == "board") {
-        getCurrentPlayer().displayAll();
-        getOtherPlayer().displayAll();
+
     } else {
         std::cerr << "Unknown command." << std::endl;
     }

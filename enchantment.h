@@ -16,7 +16,7 @@ public:
     Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target);
 
     CardType getType() const override;
-    void display(std::ostream &out) const override;
+    void display(int line) const override;
 
     void setStatOverride(int atk, int def);
     void setStatModifier(int atkDelta, int defDelta);

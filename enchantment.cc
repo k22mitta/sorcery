@@ -9,9 +9,7 @@ CardType Enchantment::getType() const {
     return CardType::Enchantment;
 }
 
-void Enchantment::display(std::ostream &out) const {
-    target->display(out);
-    out << "| Enchantment applied: " << name << "\n";
+void Enchantment::display(int line) const {
 }
 
 void Enchantment::setStatOverride(int atk, int def) {

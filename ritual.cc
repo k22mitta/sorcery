@@ -16,8 +16,7 @@ void Ritual::consumeCharge() { if (canActivate()) charges -= activationCost; }
 
 DarkRitual::DarkRitual()
     : Ritual{"Dark Ritual", 0, 1, 5} {}
-void DarkRitual::display(std::ostream &out) const {
-
+void DarkRitual::display(int line) const {
 }
 void DarkRitual::trigger(Game &game) {
     std::cout << "Dark Ritual Triggered — Gain 1 magic" << std::endl;
@@ -27,8 +26,7 @@ void DarkRitual::trigger(Game &game) {
 
 AuraOfPower::AuraOfPower()
     : Ritual{"Aura of Power", 1, 1, 4} {}
-void AuraOfPower::display(std::ostream &out) const {
-
+void AuraOfPower::display(int line) const {
 }
 void AuraOfPower::trigger(Game &game) {
     std::cout << "Aura of Power Triggered — Buff all minions" << std::endl;
@@ -43,8 +41,7 @@ void AuraOfPower::trigger(Game &game) {
 
 StandStill::StandStill()
     : Ritual{"Standstill", 3, 2, 4} {}
-void StandStill::display(std::ostream &out) const {
-
+void StandStill::display(int line) const {
 }
 void StandStill::trigger(Game &game) {
     std::cout << "Standstill Triggered — Destroy last minion" << std::endl;

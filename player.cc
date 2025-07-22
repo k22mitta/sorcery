@@ -147,52 +147,5 @@ std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Card *Player::getRitual() { return ritual.get(); }
 
 void Player::displayHand() const {
-    for (auto& c : hand) {
-        c -> display(std::cout);
-    }
-}
 
-void Player::displayAll() const {
-    std::cout << "=== " << name << " ===" << std::endl;
-
-    std::cout << "Life: " << life << " | Magic: " << magic << std::endl;
-
-    std::cout << "--- Hand ---" << std::endl;
-    if (hand.empty()) {
-        std::cout << "(Empty)" << std::endl;
-    } else {
-        for (size_t i = 0; i < hand.size(); ++i) {
-            std::cout << "[" << (i + 1) << "] ";
-            hand[i]->display(std::cout);
-        }
-    }
-
-    std::cout << "--- Board ---" << std::endl;
-    if (board.empty()) {
-        std::cout << "(Empty)" << std::endl;
-    } else {
-        for (size_t i = 0; i < board.size(); ++i) {
-            std::cout << "[" << (i + 1) << "] ";
-            board[i]->display(std::cout);
-        }
-    }
-
-    std::cout << "--- Ritual ---" << std::endl;
-    if (ritual) {
-        ritual->display(std::cout);
-    } else {
-        std::cout << "(None)" << std::endl;
-    }
-
-    std::cout << "--- Graveyard ---" << std::endl;
-    if (graveyard.empty()) {
-        std::cout << "(Empty)" << std::endl;
-    } else {
-        for (size_t i = 0; i < graveyard.size(); ++i) {
-            std::cout << "[" << (i + 1) << "] ";
-            graveyard[i]->display(std::cout);
-        }
-    }
-
-    std::cout << "==============" << std::endl;
 }

@@ -39,7 +39,6 @@ public:
     Card *getRitual();
 
     void displayHand() const;
-    void displayAll() const;
 };
 
 #endif

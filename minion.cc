@@ -7,18 +7,8 @@ Minion::Minion(const std::string &name, int cost, int atk, int def)
 
 CardType Minion::getType() const { return CardType::Minion; }
 
-void Minion::display(std::ostream &out) const {
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(29) << "Minion" << "|\n";
-    out << "|-------------------------------|\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|                               |\n";
-    out << "|------                   ------|\n";
-    out << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |\n";
-    out << "|-------------------------------|\n";
+void Minion::display(int line) const {
+
 }
 
 int Minion::getAttack() const { return atk; }

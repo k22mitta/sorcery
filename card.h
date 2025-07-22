@@ -16,7 +16,7 @@ public:
     virtual ~Card() = default;
 
     virtual CardType getType() const = 0;
-    virtual void display(std::ostream &out) const = 0;
+    virtual void display(int line) const = 0;
     std::string getName() const;
     int getCost() const;
 };
