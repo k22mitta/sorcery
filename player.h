@@ -22,7 +22,7 @@ public:
     Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck);
 
     std::shared_ptr<Ritual> getRitual() const;
-    std::vector<std::shared_ptr<Card>> &getGraveyard();
+    std::shared_ptr<Card> getGraveyard() const;
     const std::vector<std::shared_ptr<Minion>> &getMinions() const;
     std::vector<std::string> displayHero() const;
 

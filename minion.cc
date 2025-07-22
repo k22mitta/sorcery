@@ -17,7 +17,6 @@ void Minion::display(std::ostream &out) const {
 
 int Minion::getAttack() const { return atk; }
 int Minion::getDefense() const { return def; }
-void Minion::setDefense(int val) { def = val; }
 bool Minion::canAct() const { return actions > 0; }
 void Minion::restoreAction() { actions = 1; }
 void Minion::spendAction() { if (actions > 0) --actions; }

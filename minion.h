@@ -18,7 +18,6 @@ public:
 
     int getAttack() const;
     int getDefense() const;
-    void setDefense(int val);
     bool canAct() const;
     void restoreAction();
     void spendAction();
