@@ -16,59 +16,41 @@ void Ritual::consumeCharge() { if (canActivate()) charges -= activationCost; }
 DarkRitual::DarkRitual()
     : Ritual{"Dark Ritual", 0, 1, 5} {}
 void DarkRitual::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| Ritual                        |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(2) << activationCost << " | <trigger description here> |\n";
-    out << "|                               |\n";
-    out << "| ------                       |\n";
-    out << "|   " << std::setw(2) << charges << "                         |\n";
-    out << "|-------------------------------|\n";
+
 }
 void DarkRitual::trigger(Game &game) {
-    // TODO
-    std::cout << "Dark Ritual Triggered" << std::endl;
+    std::cout << "Dark Ritual Triggered — Gain 1 magic" << std::endl;
+    Player &owner = game.getCurrentPlayer();
+    owner.changeMagic(1);
 }
 
 AuraOfPower::AuraOfPower()
     : Ritual{"Aura of Power", 1, 1, 4} {}
 void AuraOfPower::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| Ritual                        |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(2) << activationCost << " | <trigger description here> |\n";
-    out << "|                               |\n";
-    out << "| ------                       |\n";
-    out << "|   " << std::setw(2) << charges << "                         |\n";
-    out << "|-------------------------------|\n";
+
 }
 void AuraOfPower::trigger(Game &game) {
-    // TODO
-    std::cout << "Aura of Power Triggered" << std::endl;
+    std::cout << "Aura of Power Triggered — Buff all minions" << std::endl;
+    Player &owner = game.getCurrentPlayer();
+    for (auto& card : owner.getBoard()) {
+        Minion *minion = dynamic_cast<Minion*>(card.get());
+        if (minion) {
+            minion->modifyStats(1, 1);
+        }
+    }
 }
 
 StandStill::StandStill()
     : Ritual{"Standstill", 3, 2, 4} {}
 void StandStill::display(std::ostream &out) const {
-    // TODO
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(25) << std::left << name << " | " << std::setw(2) << cost << " |\n";
-    out << "|-------------------------------|\n";
-    out << "| Ritual                        |\n";
-    out << "|-------------------------------|\n";
-    out << "| " << std::setw(2) << activationCost << " | <trigger description here> |\n";
-    out << "|                               |\n";
-    out << "| ------                       |\n";
-    out << "|   " << std::setw(2) << charges << "                         |\n";
-    out << "|-------------------------------|\n";
+
 }
 void StandStill::trigger(Game &game) {
-    // TODO
-    std::cout << "Standstill Triggered" << std::endl;
+    std::cout << "Standstill Triggered — Destroy last minion" << std::endl;
+    Player &opponent = game.getOtherPlayer();
+    if (!opponent.getBoard().empty()) {
+        auto &board = opponent.getBoard();
+        opponent.getGraveyard().emplace_back(std::move(board.back()));
+        board.pop_back();
+    }
 }
