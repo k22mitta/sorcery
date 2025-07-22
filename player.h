@@ -35,8 +35,8 @@ public:
     void changeMagic(int delta);
     std::vector<std::unique_ptr<Card>> &getHand();
     std::vector<std::unique_ptr<Card>> &getBoard();
+    std::vector<std::unique_ptr<Card>> &getGraveyard();
     Card *getRitual();
-    Card *getGraveyardTop();
 
     void displayHand() const;
 };

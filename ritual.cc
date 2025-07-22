@@ -1,4 +1,5 @@
 #include "ritual.h"
+#include "minion.h"
 #include <iostream>
 #include <iomanip>
 

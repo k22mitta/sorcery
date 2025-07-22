@@ -133,8 +133,8 @@ void Player::changeLife(int delta) { life += delta; }
 void Player::changeMagic(int delta) { magic += delta; }
 std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
+std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Card *Player::getRitual() { return ritual.get(); }
-Card *Player::getGraveyardTop() { return graveyard.empty() ? nullptr : graveyard.back().get(); }
 
 void Player::displayHand() const {
     for (auto& c : hand) {
