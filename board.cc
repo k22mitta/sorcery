@@ -22,11 +22,33 @@ void Board::notifyObservers() const {
     }
 }
 
-void Board::display() const {
-    // Placeholder for now
-    std::cout << "Displaying board state...\n";
-    std::cout << player1->getName() << " (Life: " << player1->getLife()
-              << ", Magic: " << player1->getMagic() << ")\n";
-    std::cout << player2->getName() << " (Life: " << player2->getLife()
-              << ", Magic: " << player2->getMagic() << ")\n";
+void Board::display(std::ostream &out) {
+    Player &current = *players[currentPlayer];
+    Player &opponent = *players[1 - currentPlayer];
+
+    std::vector<std::string> topLeft = opponent.getRitual() ? opponent.getRitual()->display() : std::vector<std::string>(7, std::string(33, ' '));
+    std::vector<std::string> topCenter = opponent.displayHero();
+    std::vector<std::string> topRight = opponent.getGraveyard() ? opponent.getGraveyard()->display() : std::vector<std::string>(7, std::string(33, ' '));
+    printCardRow(out, {topLeft, topCenter, topRight});
+
+    std::vector<std::vector<std::string>> topRow;
+    for (auto &minion : opponent.getMinions()) {
+        topRow.push_back(minion->display());
+    }
+    printCardRow(out, topRow);
+
+    out << std::string(165, '-') << std::endl;
+
+    std::vector<std::vector<std::string>> bottomRow;
+    for (auto &minion : current.getMinions()) {
+        bottomRow.push_back(minion->display());
+    }
+    printCardRow(out, bottomRow);
+
+    std::vector<std::string> bottomLeft = current.getRitual() ? current.getRitual()->display() : std::vector<std::string>(7, std::string(33, ' '));
+    std::vector<std::string> bottomCenter = current.displayHero();
+    std::vector<std::string> bottomRight = current.getGraveyard() ? current.getGraveyard()->display() : std::vector<std::string>(7, std::string(33, ' '));
+    printCardRow(out, {bottomLeft, bottomCenter, bottomRight});
+
+    out << std::endl;
 }
