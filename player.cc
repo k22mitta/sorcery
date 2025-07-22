@@ -1,6 +1,5 @@
 #include "player.h"
 #include "minion.h"
-#include "display.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -66,7 +65,8 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
     }
     attacker->spendAction();
     if (whoAttacked == -1) {
-        opponent.changeLife(-attacker->getAttack());
+        std::cout << "attacks opponent directly" << std::endl;
+        // TODO: Apply attacktion to opponent player
     } else {
         if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.getBoard().size())) {
             std::cout << "Invalid target minion index" << std::endl;
@@ -74,22 +74,7 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
         }
         Card *targetCard = opponent.getBoard()[whoAttacked - 1].get();
         Minion *target = dynamic_cast<Minion*>(targetCard);
-        if (!target) {
-            std::cout << "Target card is not a minion" << std::endl;
-            return;
-        }
-        
-        attacker->setDefense(attacker->getDefense() - target->getAttack());
-        target->setDefense(target->getDefense() - attacker->getAttack());
-
-        if (attacker->getDefense() <= 0) {
-            graveyard.emplace_back(std::move(board[whoAttack - 1]));
-            board.erase(board.begin() + (whoAttack - 1));
-        }
-        if (target->getDefense() <= 0) {
-            opponent.getGraveyard().emplace_back(std::move(opponent.getBoard()[whoAttacked - 1]));
-            opponent.getBoard().erase(opponent.getBoard().begin() + (whoAttacked - 1));
-        }
+        // TODO: Apply combat logic
     }
 }
 
@@ -97,15 +82,7 @@ void Player::startTurn() {
     magic++;
     drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
-    for (auto &card : board) {
-        Minion* minion = dynamic_cast<Minion*>(card.get());
-        if (minion) {
-            minion->restoreAction();
-        }
-    }
-    if (ritual) {
-        // TODO: ritual logic
-    }
+    // TODO: Trigger start-of-turn effects
 }
 
 void Player::endTurn() {
@@ -132,22 +109,6 @@ void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
             break;
         }
     }
-}
-
-std::shared_ptr<Ritual> Player::getRitual() const {
-    return ritual;
-}
-
-std::vector<std::shared_ptr<Card>> &Player::getGraveyard() {
-    return graveyard;
-}
-
-const std::vector<std::shared_ptr<Minion>> &Player::getMinions() const {
-    return minions;
-}
-
-std::vector<std::string> Player::displayHero() const {
-    return displayMinion(name, 0, 0, life, "HP/MP: " + std::to_string(life) + "/" + std::to_string(magic));
 }
 
 std::string Player::getName() const { return name; }
