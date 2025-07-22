@@ -97,15 +97,7 @@ void Player::startTurn() {
     magic++;
     drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
-    for (auto &card : board) {
-        Minion* minion = dynamic_cast<Minion*>(card.get());
-        if (minion) {
-            minion->restoreAction();
-        }
-    }
-    if (ritual) {
-        // TODO: ritual logic
-    }
+    // TODO: Trigger start-of-turn effects
 }
 
 void Player::endTurn() {
