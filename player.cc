@@ -66,15 +66,30 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
     attacker->spendAction();
     if (whoAttacked == -1) {
         std::cout << "attacks opponent directly" << std::endl;
-        // TODO: Apply attacktion to opponent player
+        opponent.changeLife(-attacker->getAttack());
     } else {
-        if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.getBoard().size())) {
+        if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.board.size())) {
             std::cout << "Invalid target minion index" << std::endl;
             return;
         }
-        Card *targetCard = opponent.getBoard()[whoAttacked - 1].get();
+        Card *targetCard = opponent.board[whoAttacked - 1].get();
         Minion *target = dynamic_cast<Minion*>(targetCard);
-        // TODO: Apply combat logic
+        if (!target) {
+            std::cout << "Target card is not a minion" << std::endl;
+            return;
+        }
+        
+        attacker->setDefense(attacker->getDefense() - target->getAttack());
+        target->setDefense(target->getDefense() - attacker->getAttack());
+
+        if (attacker->getDefense() <= 0) {
+            graveyard.emplace_back(std::move(board[whoAttack - 1]));
+            board.erase(board.begin() + (whoAttack - 1));
+        }
+        if (target->getDefense() <= 0) {
+            opponent.graveyard.emplace_back(std::move(opponent.board[whoAttacked - 1]));
+            opponent.board.erase(opponent.board.begin() + (whoAttacked - 1));
+        }
     }
 }
 
