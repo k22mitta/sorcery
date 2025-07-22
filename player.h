@@ -13,18 +13,12 @@ class Player {
     int magic = 3;
     std::vector<std::unique_ptr<Card>> hand;
     std::vector<std::unique_ptr<Card>> deck;
+    std::vector<std::unique_ptr<Card>> graveyard;
     std::vector<std::unique_ptr<Card>> board; // size <= 5
-    std::shared_ptr<Ritual> ritual;
-    std::vector<std::shared_ptr<Card>> graveyard;
-    std::vector<std::shared_ptr<Minion>> minions;
+    std::unique_ptr<Card> ritual;
 
 public:
     Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck);
-
-    std::shared_ptr<Ritual> getRitual() const;
-    std::shared_ptr<Card> getGraveyard() const;
-    const std::vector<std::shared_ptr<Minion>> &getMinions() const;
-    std::vector<std::string> displayHero() const;
 
     void drawCard();
     void drawInitialHand();
