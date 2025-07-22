@@ -111,6 +111,22 @@ void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
     }
 }
 
+std::shared_ptr<Ritual> Player::getRitual() const {
+    return ritual;
+}
+
+std::shared_ptr<Card> Player::getGraveyard() const {
+    return graveyard.empty() ? nullptr : graveyard.back();
+}
+
+const std::vector<std::shared_ptr<Minion>> &Player::getMinions() const {
+    return minions;
+}
+
+std::vector<std::string> Player::displayHero() const {
+    return displayMinion(name, 0, 0, life, "HP/MP: " + std::to_string(life) + "/" + std::to_string(magic));
+}
+
 std::string Player::getName() const { return name; }
 int Player::getLife() const { return life; }
 int Player::getMagic() const { return magic; }
