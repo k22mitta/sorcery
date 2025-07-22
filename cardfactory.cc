@@ -12,7 +12,8 @@ std::vector<std::unique_ptr<Card>> CardFactory::loadDeck(const std::string &file
     std::vector<std::unique_ptr<Card>> deck;
     std::string name;
     while (std::getline(file, name)) {
-        deck.emplace_back(createCard(name));
+        auto card = createCard(name);
+        if (card) deck.emplace_back(std::move(card));
     }
     return deck;
 }
