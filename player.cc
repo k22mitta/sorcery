@@ -79,16 +79,16 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
             return;
         }
         
-        attacker->setDefense(attacker->getDefense() - defender->getAttack());
-        defender->setDefense(defender->getDefense() - attacker->getAttack());
+        attacker->setDefense(attacker->getDefense() - target->getAttack());
+        target->setDefense(target->getDefense() - attacker->getAttack());
 
         if (attacker->getDefense() <= 0) {
-            graveyard.emplace_back(std::move(board[attackerIndex - 1]));
-            board.erase(board.begin() + (attackerIndex - 1));
+            graveyard.emplace_back(std::move(board[whoAttack - 1]));
+            board.erase(board.begin() + (whoAttack - 1));
         }
-        if (defender->getDefense() <= 0) {
-            opponent.getGraveyard().emplace_back(std::move(opponent.getBoard()[targetIndex - 1]));
-            opponent.getBoard().erase(opponent.getBoard().begin() + (targetIndex - 1));
+        if (target->getDefense() <= 0) {
+            opponent.getGraveyard().emplace_back(std::move(opponent.getBoard()[whoAttacked - 1]));
+            opponent.getBoard().erase(opponent.getBoard().begin() + (whoAttacked - 1));
         }
     }
 }
@@ -130,8 +130,8 @@ std::shared_ptr<Ritual> Player::getRitual() const {
     return ritual;
 }
 
-std::shared_ptr<Card> Player::getGraveyard() const {
-    return graveyard.empty() ? nullptr : graveyard.back();
+std::vector<std::shared_ptr<Card>> &Player::getGraveyard() {
+    return graveyard;
 }
 
 const std::vector<std::shared_ptr<Minion>> &Player::getMinions() const {
