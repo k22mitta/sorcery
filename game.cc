@@ -36,35 +36,29 @@ void Game::init(const std::string &initFile) {
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
     auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
 
-    p1->shuffleAndDraw(5, testingMode, 12345);
-    p2->shuffleAndDraw(5, testingMode, 12345);
+    p1->drawInitialHand();
+    p2->drawInitialHand();
 
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
 
-    std::string cmd;
-    while (std::getline(*in, cmd)) {
-        processCommand(cmd);
-    }
 }
 
 void Game::start() {
-    board->getPlayer(1).drawInitialHand();
-    board->getPlayer(2).drawInitialHand();
-    nextTurn();
-}
+    while (true) {
+        currentPlayer = (currentPlayer == 1 ? 2 : 1);
+        Player &p = getCurrentPlayer();
+        p.startTurn();
+        // board->display();
+        getCurrentPlayer().displayAll();
+        getOtherPlayer().displayAll();
 
-void Game::nextTurn() {
-    currentPlayer = (currentPlayer == 1 ? 2 : 1);
-    Player &p = getCurrentPlayer();
-    p.startTurn();
-    board->display();
-
-    std::string cmd;
-    while (std::getline(std::cin, cmd)) {
-        if (cmd == "end") break;
-        processCommand(cmd);
+        std::string cmd;
+        while (std::getline(std::cin, cmd)) {
+            if (cmd == "end") break;
+            processCommand(cmd);
+        }
+        p.endTurn();
     }
-    p.endTurn();
 }
 
 void Game::processCommand(const std::string &line) {
