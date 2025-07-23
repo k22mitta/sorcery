@@ -5,6 +5,7 @@
 #include "card.h"
 
 class Minion : public Card {
+protected:
     int atk;
     int def;
     int actions;

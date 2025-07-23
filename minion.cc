@@ -29,11 +29,299 @@ NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, 0, 1} {}
 ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, 1, 1} {}
 MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, 2, 3} {}
 
-void AirElemental::display(int line) const {}
-void EarthElemental::display(int line) const {}
-void BoneGolem::display(int line) const {}
-void FireElemental::display(int line) const {}
-void PotionSeller::display(int line) const {}
-void NovicePyromancer::display(int line) const {}
-void ApprenticeSummoner::display(int line) const {}
-void MasterSummoner::display(int line) const {}
+void AirElemental::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Air Elemental           |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void EarthElemental::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Earth Elemental         |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void BoneGolem::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Bone Golem              |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void FireElemental::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Fire Elemental          |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void PotionSeller::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Potion Seller           |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void NovicePyromancer::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Novice Pyromancer       |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void ApprenticeSummoner::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Apprentice Summoner     |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}
+void MasterSummoner::display(int line) const {
+    switch(line) {
+        case 0:
+            std::cout << "|-------------------------------|";
+            break;
+        case 1:
+            std::cout << "| Master Summoner         |" << std::setw(5) << cost << "|";
+            break;
+        case 2:
+            std::cout << "|-------------------------------|";
+            break;
+        case 3: 
+            std::cout << "|                        Minion |";
+            break;
+        case 4:
+            std::cout << "|-------------------------------|";
+            break;
+        case 5:
+            std::cout << "|                               |";
+            break;
+        case 6:
+            std::cout << "|                               |";
+            break;
+        case 7:
+            std::cout << "|                               |";
+            break;
+        case 8:
+            std::cout << "|------                   ------|";
+            break;
+        case 9:
+            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
+            break;
+        case 10:
+            std::cout << "|-------------------------------|";
+            break;
+    }
+}

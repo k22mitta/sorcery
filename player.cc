@@ -170,10 +170,11 @@ void Player::display(int line, int whichPlayer) const {
 
 void Player::displayHand() const {
     const int BLOCK_HEIGHT = 11;
+    std::cout << hand.size() << std::endl;
     for (int i = 0; i < BLOCK_HEIGHT; i++) {
         std::cout << '|';
-        for (int j = 0; j < board.size(); j++) {
-            board[j]->display(i);
+        for (int j = 0; j < hand.size(); j++) {
+            hand[j]->display(i);
         }
         std::cout << '|' << std::endl;
     }
