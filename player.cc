@@ -18,7 +18,6 @@ void Player::drawCard() {
 
 void Player::drawInitialHand() {
     for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
-    drawRitual();
 }
 
 void Player::playCard(int index, int targetPlayer, int targetCard) {
@@ -48,7 +47,8 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             return;
 
         case CardType::Ritual:
-            ritual = std::move(currentCard);
+            ritual = std::move(hand[index - 1]);
+            std::cout << name << " played ritual: " << ritual->getName() << std::endl;
             break;
 
         case CardType::Enchantment:
@@ -130,16 +130,6 @@ void Player::shuffleAndDraw(bool testingMode, unsigned seed) {
     }
 }
 
-void Player::drawRitual() {
-    for (auto it = deck.begin(); it != deck.end(); ++it) {
-        if ((*it)->getType() == CardType::Ritual) {
-            ritual = std::move(*it);
-            deck.erase(it);
-            break;
-        }
-    }
-}
-
 std::string Player::getName() const { return name; }
 int Player::getLife() const { return life; }
 int Player::getMagic() const { return magic; }
@@ -181,4 +171,15 @@ void Player::displayHand() const {
         }
         std::cout << '|' << std::endl;
     }
+}
+
+void Player::destoryMinion(int index) {
+    if (index >= 0 && index < static_cast<int>(board.size())) {
+        graveyard.emplace_back(std::move(board[index]));
+        board.erase(board.begin() + index);
+    }
+}
+
+void Player::removeRitual() {
+    ritual.reset();
 }

@@ -27,7 +27,6 @@ public:
     void startTurn();
     void endTurn();
     void shuffleAndDraw(bool testingMode, unsigned seed);
-    void drawRitual();
 
     std::string getName() const;
     int getLife() const;
@@ -39,8 +38,10 @@ public:
     std::vector<std::unique_ptr<Card>> &getGraveyard();
     Card *getRitual();
     void display(int line, int whichPlayer) const;
-
     void displayHand() const;
+
+    void destoryMinion(int index);
+    void removeRitual();
 };
 
 #endif
