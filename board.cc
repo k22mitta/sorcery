@@ -21,8 +21,8 @@ void Board::display() const {
     std::cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
     for (int i = 0; i < BLOCK_HEIGHT; i++) {
         std::cout << '|';
-        displayEmptyBlock(i);
-        // player1->getRitual() ? player1->getRitual()->display(i) : displayEmptyBlock(i);
+        // displayEmptyBlock(i);
+        player1->getRitual() ? player1->getRitual()->display(i) : displayEmptyBlock(i);
         std::cout << "                                 ";
         player1->display(i, 1);
         std::cout << "                                 ";
@@ -55,8 +55,8 @@ void Board::display() const {
     }
     for (int i = 0; i < BLOCK_HEIGHT; i++) {
         std::cout << '|';
-        displayEmptyBlock(i);
-        // player2->getRitual() ? player2->getRitual()->display(i) : displayEmptyBlock(i);
+        // displayEmptyBlock(i);
+        player2->getRitual() ? player2->getRitual()->display(i) : displayEmptyBlock(i);
         std::cout << "                                 ";
         player2->display(i, 2);
         std::cout << "                                 ";

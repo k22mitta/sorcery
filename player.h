@@ -27,6 +27,7 @@ public:
     void startTurn();
     void endTurn();
     void shuffleAndDraw(bool testingMode, unsigned seed);
+    void drawRitual();
 
     std::string getName() const;
     int getLife() const;
