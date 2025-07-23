@@ -23,39 +23,7 @@ void Enchantment::display(int line) const {
     }
 }
 
-class GiantStrength : public Enchantment {
-public:
-    GiantStrength(std::shared_ptr<Minion> target)
-        : Enchantment("Giant Strength", 1, std::move(target)) {}
 
-    int getAttack() const override { return target->getAttack() + 2; }
-    int getDefence() const override { return target->getDefence() + 2; }
-};
-
-class MagicFatigue : public Enchantment {
-public:
-    MagicFatigue(std::shared_ptr<Minion> target)
-        : Enchantment("Magic Fatigue", 0, std::move(target)) {}
-
-    std::shared_ptr<Ability> getActivatedAbility() const override {
-        auto base = target->getActivatedAbility();
-        if (base) return std::make_shared<CostModifier>(base, +2);
-        return nullptr;
-    }
-};
-
-class Silence : public Enchantment {
-public:
-    Silence(std::shared_ptr<Minion> target)
-        : Enchantment("Silence", 1, std::move(target)) {}
-
-    std::shared_ptr<Ability> getActivatedAbility() const override { return nullptr; }
-    std::shared_ptr<TriggeredAbility> getTriggeredAbility() const override { return nullptr; }
-
-    void useAbility(Player &, Player &, int, int) override {
-        throw std::runtime_error("This minion is silenced and cannot use abilities.");
-    }
-};
 
 void Enchantment::setStatOverride(int atk, int def) {
     overrideStats = true;
