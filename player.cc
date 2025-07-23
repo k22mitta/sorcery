@@ -47,9 +47,6 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             return;
 
         case CardType::Ritual:
-            if (ritual) {
-                graveyard.emplace_back(std::move(ritual));
-            }
             ritual = std::move(hand[index - 1]);
             std::cout << name << " played ritual: " << ritual->getName() << std::endl;
             break;
@@ -174,4 +171,15 @@ void Player::displayHand() const {
         }
         std::cout << '|' << std::endl;
     }
+}
+
+void Player::destoryMinion(int index) {
+    if (index >= 0 && index < static_cast<int>(board.size())) {
+        graveyard.emplace_back(std::move(board[index]));
+        board.erase(board.begin() + index);
+    }
+}
+
+void Player::removeRitual() {
+    ritual.reset();
 }
