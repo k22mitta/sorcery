@@ -10,7 +10,20 @@ CardType Enchantment::getType() const {
 }
 
 void Enchantment::display(int line) const {
+    if (line < 5) {
+        switch (line) {
+            case 0: std::cout << "|-------------------------------|"; break;
+            case 1: std::cout << "| " << std::setw(25) << name << " | " << std::setw(3) << cost << " |"; break;
+            case 2: std::cout << "|-------------------------------|"; break;
+            case 3: std::cout << "|                   Enchantment |"; break;
+            case 4: std::cout << "|-------------------------------|"; break;
+        }
+    } else if (line < 11) {
+        target->display(line - 5);
+    }
 }
+
+
 
 void Enchantment::setStatOverride(int atk, int def) {
     overrideStats = true;
