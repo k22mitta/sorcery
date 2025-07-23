@@ -169,6 +169,7 @@ void Player::display(int line, int whichPlayer) const {
 }
 
 void Player::displayHand() const {
+    const int BLOCK_HEIGHT = 11;
     for (int i = 0; i < BLOCK_HEIGHT; i++) {
         std::cout << '|';
         for (int j = 0; j < board.size(); j++) {
