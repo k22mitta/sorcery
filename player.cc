@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include <iomanip>
 
 Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
     : name{name}, id{id}, deck{std::move(deck)} {}
@@ -147,81 +148,32 @@ std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Card *Player::getRitual() { return ritual.get(); }
 
 void Player::display(int line, int whichPlayer) const {
-    if (whichPlayer == 1) {
-        switch(line) {
-            case 0:
-                std::cout << "|-------------------------------|";
-                break;
-            case 1:
-                std::cout << "|                               |";
-                break;
-            case 2:
-                std::cout << "|                               |";
-                break;
-            case 3:
-                std::cout << "|                               |";
-                break;
-            case 4:
-                std::cout << "|                               |";
-                break;
-            case 5:
-                std::cout << "|                               |";
-                break;
-            case 6:
-                std::cout << "|                               |";
-                break;
-            case 7:
-                std::cout << "|                               |";
-                break;
-            case 8:
-                std::cout << "|                               |";
-                break;
-            case 9:
-                std::cout << "|                               |";
-                break;
-            case 10:
-                std::cout << "|-------------------------------|";
-                break;
-        }
-    } else {
-        switch(line) {
-            case 0:
-                std::cout << "|-------------------------------|";
-                break;
-            case 1:
-                std::cout << "|                               |";
-                break;
-            case 2:
-                std::cout << "|                               |";
-                break;
-            case 3:
-                std::cout << "|                               |";
-                break;
-            case 4:
-                std::cout << "|                               |";
-                break;
-            case 5:
-                std::cout << "|                               |";
-                break;
-            case 6:
-                std::cout << "|                               |";
-                break;
-            case 7:
-                std::cout << "|                               |";
-                break;
-            case 8:
-                std::cout << "|                               |";
-                break;
-            case 9:
-                std::cout << "|                               |";
-                break;
-            case 10:
-                std::cout << "|-------------------------------|";
-                break;
-        }
+    const int BLOCK_WIDTH = 31;
+    int frontNamePad = (BLOCK_WIDTH - 2 - name.length()) / 2;
+    int backNamePad = (BLOCK_WIDTH - 2 - name.length()) % 2;
+    if (line == 0 || line == 10) {
+        std::cout << "|-------------------------------|";
     }
+    else if (whichPlayer == 1 && line == 3
+          || whichPlayer == 2 && line == 7)  {
+        std::cout << "| " << std::string(frontNamePad, ' ') << name << std::string(frontNamePad + backNamePad, ' ') << " |";
+    } else if (whichPlayer == 1 && line == 8
+          || whichPlayer == 2 && line == 2)  {
+        std::cout << "|------                   ------|";
+    } else if (whichPlayer == 1 && line == 9
+          || whichPlayer == 2 && line == 1)  {
+        std::cout << "| " << std::setw(3) << life << " |                   | " << std::setw(3) << magic << " |";
+    } else {
+        std::cout << "|                               |";
+    } 
 }
 
 void Player::displayHand() const {
-
+    for (int i = 0; i < BLOCK_HEIGHT; i++) {
+        std::cout << '|';
+        for (int j = 0; j < board.size(); j++) {
+            board[j]->display(i);
+        }
+        std::cout << '|' << std::endl;
+    }
 }
