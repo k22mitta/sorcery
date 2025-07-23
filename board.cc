@@ -65,3 +65,37 @@ void Board::display() const {
     }
     std::cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 }
+
+void Board::start_turn(int player_id, Game &game) {
+    Player &p = getPlayer(player_id);
+    if (auto ritual = dynamic_cast<Ritual*>(p.getRitual())) {
+        ritual->trigger(game);
+    }
+    for (auto &card : p.getBoard()) {
+        Minion *m = dynamic_cast<Minion*>(card.get());
+        if (m && m->getAbility()) m->getAbility()->execute(game);
+    }
+}
+
+void Board::end_turn(int player_id, Game &game) {
+    Player &p = getPlayer(player_id);
+    for (auto &card : p.getBoard()) {
+        Minion *m = dynamic_cast<Minion*>(card.get());
+        if (m && m->getAbility()) m->getAbility()->execute(game);
+    }
+}
+
+void Board::minion_enter(int player_id, Game &game) {
+    Player &p = getPlayer(player_id);
+    if (auto ritual = dynamic_cast<Ritual*>(p.getRitual())) {
+        ritual->trigger(game);
+    }
+}
+
+void Board::minion_leave(int player_id, Game &game) {
+    Player &p = getPlayer(player_id);
+    for (auto &card : p.getBoard()) {
+        Minion *m = dynamic_cast<Minion*>(card.get());
+        if (m && m->getAbility()) m->getAbility()->execute(game);
+    }
+}
