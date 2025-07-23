@@ -25,21 +25,21 @@ public:
 class DarkRitual : public Ritual {
 public:
     DarkRitual();
-    void display(std::ostream &out) const override;
+    void display(int line) const override;
     void trigger(Game &game) override;
 };
 
 class AuraOfPower : public Ritual {
 public:
     AuraOfPower();
-    void display(std::ostream &out) const override;
+    void display(int line) const override;
     void trigger(Game &game) override;
 };
 
 class StandStill : public Ritual {
 public:
     StandStill();
-    void display(std::ostream &out) const override;
+    void display(int line) const override;
     void trigger(Game &game) override;
 };
 

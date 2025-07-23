@@ -21,10 +21,10 @@ public:
     Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2);
     void init(const std::string &initFile = "");
     void start();
-    void nextTurn();
     void processCommand(const std::string &line);
     Player &getCurrentPlayer();
     Player &getOtherPlayer();
+    void togglePlayer();
     bool isTestingMode() const;
 };
 

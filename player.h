@@ -26,7 +26,8 @@ public:
     void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
-    void shuffleAndDraw(int numCards, bool testingMode, unsigned seed);
+    void shuffleAndDraw(bool testingMode, unsigned seed);
+    void drawRitual();
 
     std::string getName() const;
     int getLife() const;
@@ -35,8 +36,9 @@ public:
     void changeMagic(int delta);
     std::vector<std::unique_ptr<Card>> &getHand();
     std::vector<std::unique_ptr<Card>> &getBoard();
+    std::vector<std::unique_ptr<Card>> &getGraveyard();
     Card *getRitual();
-    Card *getGraveyardTop();
+    void display(int line, int whichPlayer) const;
 
     void displayHand() const;
 };

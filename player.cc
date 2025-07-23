@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include <iomanip>
 
 Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
     : name{name}, id{id}, deck{std::move(deck)} {}
@@ -16,11 +17,13 @@ void Player::drawCard() {
 }
 
 void Player::drawInitialHand() {
-    for (int i = 0; i < 5; i++) drawCard();
+    for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
+    drawRitual();
 }
 
 void Player::playCard(int index, int targetPlayer, int targetCard) {
     if (index < 1 || index > static_cast<int>(hand.size())) {
+        std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
     }
@@ -41,13 +44,16 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             break;
 
         case CardType::Spell:
-            break;
+            std::cout << "spell is not allowed to be played on board" << std::endl;
+            return;
 
         case CardType::Ritual:
+            ritual = std::move(currentCard);
             break;
 
         case CardType::Enchantment:
-            break;
+            std::cout << "enchantment is not allowed to be played on board" << std::endl;
+            return;
     }
     hand.erase(hand.begin() + (index - 1));
 }
@@ -95,9 +101,15 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
 
 void Player::startTurn() {
     magic++;
-    drawCard();
+    shuffleAndDraw(false, 12345);
     std::cout << name << " starts turn with " << magic << " magic.\n";
-    // TODO: Trigger start-of-turn effects
+
+    for (auto& card : board) {
+        Minion* minion = dynamic_cast<Minion*>(card.get());
+        if (minion) {
+            minion->restoreAction();
+        }
+    }
 }
 
 void Player::endTurn() {
@@ -105,18 +117,20 @@ void Player::endTurn() {
     // TODO: Trigger end-of-turn effects
 }
 
-void Player::shuffleAndDraw(int numCards, bool testingMode, unsigned seed) {
+void Player::shuffleAndDraw(bool testingMode, unsigned seed) {
     if (!testingMode) {
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::default_random_engine rng{seed};
     std::shuffle(deck.begin(), deck.end(), rng);
 
-    for (int i = 0; i < numCards && hand.size() < 5 && !deck.empty(); i++) {
+    if (!deck.empty() && hand.size() < 5) {
         hand.emplace_back(std::move(deck.back()));
         deck.pop_back();
     }
+}
 
+void Player::drawRitual() {
     for (auto it = deck.begin(); it != deck.end(); ++it) {
         if ((*it)->getType() == CardType::Ritual) {
             ritual = std::move(*it);
@@ -133,11 +147,38 @@ void Player::changeLife(int delta) { life += delta; }
 void Player::changeMagic(int delta) { magic += delta; }
 std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
+std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Card *Player::getRitual() { return ritual.get(); }
-Card *Player::getGraveyardTop() { return graveyard.empty() ? nullptr : graveyard.back().get(); }
+
+void Player::display(int line, int whichPlayer) const {
+    const int BLOCK_WIDTH = 31;
+    int frontNamePad = (BLOCK_WIDTH - 2 - name.length()) / 2;
+    int backNamePad = (BLOCK_WIDTH - 2 - name.length()) % 2;
+    if (line == 0 || line == 10) {
+        std::cout << "|-------------------------------|";
+    }
+    else if (whichPlayer == 1 && line == 3
+          || whichPlayer == 2 && line == 7)  {
+        std::cout << "| " << std::string(frontNamePad, ' ') << name << std::string(frontNamePad + backNamePad, ' ') << " |";
+    } else if (whichPlayer == 1 && line == 8
+          || whichPlayer == 2 && line == 2)  {
+        std::cout << "|------                   ------|";
+    } else if (whichPlayer == 1 && line == 9
+          || whichPlayer == 2 && line == 1)  {
+        std::cout << "| " << std::setw(3) << life << " |                   | " << std::setw(3) << magic << " |";
+    } else {
+        std::cout << "|                               |";
+    } 
+}
 
 void Player::displayHand() const {
-    for (auto& c : hand) {
-        c -> display(std::cout);
+    const int BLOCK_HEIGHT = 11;
+    std::cout << hand.size() << std::endl;
+    for (int i = 0; i < BLOCK_HEIGHT; i++) {
+        std::cout << '|';
+        for (int j = 0; j < hand.size(); j++) {
+            hand[j]->display(i);
+        }
+        std::cout << '|' << std::endl;
     }
 }
