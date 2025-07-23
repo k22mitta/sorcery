@@ -92,7 +92,7 @@ void Game::processCommand(const std::string &line) {
     } else if (cmd == "hand") {
         currentPlayer.displayHand();
     } else if (cmd == "board") {
-
+        board -> display();
     } else {
         std::cerr << "Unknown command." << std::endl;
     }

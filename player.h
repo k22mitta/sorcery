@@ -37,6 +37,7 @@ public:
     std::vector<std::unique_ptr<Card>> &getBoard();
     std::vector<std::unique_ptr<Card>> &getGraveyard();
     Card *getRitual();
+    void display(int line, int whichPlayer) const;
 
     void displayHand() const;
 };

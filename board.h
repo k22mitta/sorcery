@@ -4,6 +4,8 @@
 #include <memory>
 #include "player.h"
 
+#define BLOCK_HEIGHT 11
+
 class Board {
     std::unique_ptr<Player> player1;
     std::unique_ptr<Player> player2;
@@ -13,6 +15,7 @@ public:
 
     Player &getPlayer(int id);
     Player &getOpponent(int id);
+    void displayEmptyBlock(int line) const;
     void display() const;
 };
 

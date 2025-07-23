@@ -146,6 +146,82 @@ std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
 std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Card *Player::getRitual() { return ritual.get(); }
 
+void Player::display(int line, int whichPlayer) const {
+    if (whichPlayer == 1) {
+        switch(line) {
+            case 0:
+                std::cout << "|-------------------------------|";
+                break;
+            case 1:
+                std::cout << "|                               |";
+                break;
+            case 2:
+                std::cout << "|                               |";
+                break;
+            case 3:
+                std::cout << "|                               |";
+                break;
+            case 4:
+                std::cout << "|                               |";
+                break;
+            case 5:
+                std::cout << "|                               |";
+                break;
+            case 6:
+                std::cout << "|                               |";
+                break;
+            case 7:
+                std::cout << "|                               |";
+                break;
+            case 8:
+                std::cout << "|                               |";
+                break;
+            case 9:
+                std::cout << "|                               |";
+                break;
+            case 10:
+                std::cout << "|-------------------------------|";
+                break;
+        }
+    } else {
+        switch(line) {
+            case 0:
+                std::cout << "|-------------------------------|";
+                break;
+            case 1:
+                std::cout << "|                               |";
+                break;
+            case 2:
+                std::cout << "|                               |";
+                break;
+            case 3:
+                std::cout << "|                               |";
+                break;
+            case 4:
+                std::cout << "|                               |";
+                break;
+            case 5:
+                std::cout << "|                               |";
+                break;
+            case 6:
+                std::cout << "|                               |";
+                break;
+            case 7:
+                std::cout << "|                               |";
+                break;
+            case 8:
+                std::cout << "|                               |";
+                break;
+            case 9:
+                std::cout << "|                               |";
+                break;
+            case 10:
+                std::cout << "|-------------------------------|";
+                break;
+        }
+    }
+}
+
 void Player::displayHand() const {
 
 }
