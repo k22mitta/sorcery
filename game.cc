@@ -47,11 +47,13 @@ void Game::start() {
     while (true) {
         Player &p = getCurrentPlayer();
         p.startTurn();
+        board->start_turn(currentPlayer,*this);
         std::string cmd;
         while (std::getline(std::cin, cmd)) {
             if (cmd == "end") break;
             processCommand(cmd);
         }
+        board->end_turn(currentPlayer,*this);
         p.endTurn();
         togglePlayer();
     }
@@ -76,6 +78,8 @@ void Game::processCommand(const std::string &line) {
                 j = -1;
             }
             currentPlayer.attack(i, j, getOtherPlayer());
+            board->minion_leave(currentPlayer,*this);
+            board->minion_leave((currentPlayer == 1 ? 2 : 1),*this);
         }
     } else if (cmd == "play") {
         int i, p = -1, t = -1;
@@ -86,6 +90,7 @@ void Game::processCommand(const std::string &line) {
                 }
             }
             currentPlayer.playCard(i, p, t);
+            board->minion_enter(currentPlayer,*this);
         }
     } else if (cmd == "inspect") {
 
