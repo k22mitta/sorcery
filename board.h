@@ -17,6 +17,11 @@ public:
     Player &getOpponent(int id);
     void displayEmptyBlock(int line) const;
     void display() const;
+
+    void start_turn(int playerId);
+    void end_turn(int playerId);
+    void minion_enter(int playerId);
+    void minion_leave(int playerId, int index);
 };
 
 #endif
