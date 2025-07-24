@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "card.h"
+#include "ascii_graphics.h"
 
 class Ritual : public Card {
 protected:
@@ -10,7 +11,7 @@ protected:
     int charges;
 
 public:
-    Ritual(const std::string &name, int cost, int activationCost, int charges);
+    Ritual(const std::string &name, int cost, std::string description, int activationCost, int charges);
 
     CardType getType() const override;
     int getActivationCost() const;
@@ -19,27 +20,26 @@ public:
     bool canActivate() const;
     void consumeCharge();
 
+    card_template_t display() const override;
+    
     virtual void trigger(Game &game) = 0;
 };
 
 class DarkRitual : public Ritual {
 public:
     DarkRitual();
-    void display(int line) const override;
     void trigger(Game &game) override;
 };
 
 class AuraOfPower : public Ritual {
 public:
     AuraOfPower();
-    void display(int line) const override;
     void trigger(Game &game) override;
 };
 
 class StandStill : public Ritual {
 public:
     StandStill();
-    void display(int line) const override;
     void trigger(Game &game) override;
 };
 
