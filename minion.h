@@ -3,6 +3,7 @@
 
 #include "ability.h"
 #include "card.h"
+#include "ascii_graphics.h"
 
 class Minion : public Card {
 protected:
@@ -12,7 +13,7 @@ protected:
     std::unique_ptr<Ability> ability;
 
 public:
-    Minion(const std::string &name, int cost, int atk, int def);
+    Minion(const std::string &name, int cost, std::string description, int atk, int def);
 
     CardType getType() const override;
 
@@ -28,54 +29,48 @@ public:
 
     virtual Ability *getAbility();
     void setAbility(std::unique_ptr<Ability> ability);
+
+    card_template_t display() const override;
 };
 
 class AirElemental : public Minion {
 public:
     AirElemental();
-    void display(int line) const override;
 };
 
 class EarthElemental : public Minion {
 public:
     EarthElemental();
-    void display(int line) const override;
 };
 
 class BoneGolem : public Minion {
 public:
     BoneGolem();
-    void display(int line) const override;
 };
 
 class FireElemental : public Minion {
 public:
     FireElemental();
-    void display(int line) const override;
 };
 
 class PotionSeller : public Minion {
 public:
     PotionSeller();
-    void display(int line) const override;
 };
 
 class NovicePyromancer : public Minion {
 public:
     NovicePyromancer();
-    void display(int line) const override;
 };
 
 class ApprenticeSummoner : public Minion {
 public:
     ApprenticeSummoner();
-    void display(int line) const override;
 };
 
 class MasterSummoner : public Minion {
 public:
     MasterSummoner();
-    void display(int line) const override;
 };
 
 #endif

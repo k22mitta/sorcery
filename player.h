@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "card.h"
+#include "ascii_graphics.h"
 
 class Ritual;
 class Game;
@@ -42,8 +43,6 @@ public:
     std::vector<std::unique_ptr<Card>> &getGraveyard();
     Game *getGame();
     Ritual *getRitual();
-    void display(int line, int whichPlayer) const;
-    void displayHand() const;
 
     void destroyMinion(int index);
     void removeRitual();

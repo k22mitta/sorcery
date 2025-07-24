@@ -6,6 +6,7 @@
 #include <string>
 #include "player.h"
 #include "board.h"
+#include "ascii_graphics.h"
 
 class Game {
     std::unique_ptr<Board> board;

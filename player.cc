@@ -149,37 +149,6 @@ std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
 Game *Player::getGame() { return game; }
 Ritual *Player::getRitual() { return dynamic_cast<Ritual *>(ritual.get()); }
 
-void Player::display(int line, int whichPlayer) const {
-    int frontNamePad = (BLOCK_WIDTH - 2 - name.length()) / 2;
-    int backNamePad = (BLOCK_WIDTH - 2 - name.length()) % 2;
-    if (line == 0 || line == 10) {
-        std::cout << "|-------------------------------|";
-    }
-    else if (whichPlayer == 1 && line == 3
-          || whichPlayer == 2 && line == 7)  {
-        std::cout << "| " << std::string(frontNamePad, ' ') << name << std::string(frontNamePad + backNamePad, ' ') << " |";
-    } else if (whichPlayer == 1 && line == 8
-          || whichPlayer == 2 && line == 2)  {
-        std::cout << "|------                   ------|";
-    } else if (whichPlayer == 1 && line == 9
-          || whichPlayer == 2 && line == 1)  {
-        std::cout << "| " << std::setw(3) << life << " |                   | " << std::setw(3) << magic << " |";
-    } else {
-        std::cout << "|                               |";
-    } 
-}
-
-void Player::displayHand() const {
-    std::cout << hand.size() << std::endl;
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        for (int j = 0; j < hand.size(); j++) {
-            hand[j]->display(i);
-        }
-        std::cout << '|' << std::endl;
-    }
-}
-
 void Player::destroyMinion(int index) {
     if (index >= 0 && index < static_cast<int>(board.size())) {
         graveyard.emplace_back(std::move(board[index]));
