@@ -10,6 +10,24 @@ CardType Enchantment::getType() const {
 }
 
 card_template_t Enchantment::display() const {
+    if (overrideStats || attackModifier != 0 || defenseModifier != 0) {
+        int attack = overrideStats ? newAttack : target->getAttack() + attackModifier;
+        int defence = overrideStats ? newDefense : target->getDefense() + defenseModifier;
+
+        return display_enchantment_attack_defence(
+            getName(),
+            getCost(),
+            getDescription(),
+            to_string(attack),
+            to_string(defence)
+        );
+    } else {
+        return display_enchantment(
+            getName(),
+            getCost(),
+            getDescription()
+        );
+    }
 }
 
 void Enchantment::setStatOverride(int atk, int def) {
