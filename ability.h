@@ -16,5 +16,5 @@ public:
     ActivatedAbility(int cost);
     int getCost() const;
 };
-
+hhh
 #endif
