@@ -122,6 +122,14 @@ void Banish::effect(Game *game, int targetPlayer, int targetCard) {
     }
 }
 void Unsummon::effect(Game *game, int targetPlayer, int targetIndex) {
+    auto &player = game -> getPlayer(targetPlayer);
+    auto &board = player.getBoard();
+    auto &hand = player.getHand();
+    if (targetIndex < 1 || targetIndex > board.size() || hand.size() >= 5) return;
+
+    std::unique_ptr<Card> card = std::move(board[targetIndex - 1]);
+    board.erase(board.begin() + (targetIndex - 1));
+    hand.emplace_back(std::move(card));
 }
 void Recharge::effect(Game *game, int targetPlayer, int targetCard) {
     auto ritual = game->getPlayer(targetPlayer).getRitual();
@@ -136,12 +144,7 @@ void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
     auto &player = game -> getPlayer(targetPlayer);
     auto &graveyard = player.getGraveyard();
     auto &board = player.getBoard();
-    if (graveyard.empty() || board.size() >= 5) {
-        std::cout << "move failed" << std::endl;
-        std::cout << graveyard.empty() << std::endl;
-        std::cout << board.size() << std::endl;
-        return;
-    }
+    if (graveyard.empty() || board.size() >= 5) return;
     std::unique_ptr<Card> card = std::move(graveyard.back());
     graveyard.pop_back();
     Minion *minion = dynamic_cast<Minion*>(card.get());
