@@ -163,7 +163,7 @@ void Player::destroyMinion(int index) {
 }
 
 void Player::removeRitual() {
-    std::cout << ritual.getName() << "removed" << std::endl;
+    std::cout << ritual->getName() << "removed" << std::endl;
     ritual.reset();
 }
 

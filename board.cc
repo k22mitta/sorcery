@@ -13,9 +13,9 @@ Player &Board::getOpponent(int id) {
     return (id == 1) ? *player2 : *player1;
 }
 
-void Board::printRow(const std::vector<card_template_t>& cards, int height) const {
+void Board::print(const std::vector<card_template_t> &cards, int height) const {
     for (int line = 0; line < height; line++) {
-        for (const auto& card : cards) {
+        for (const auto &card : cards) {
             std::cout << card[line];
         }
         std::cout << std::endl;
@@ -56,11 +56,11 @@ void Board::display() const {
         p2Minions.push_back(CARD_TEMPLATE_BORDER);
     }
 
-    printRow(p1Minions, BLOCK_HEIGHT);
-    printRow({p1ritual, CARD_TEMPLATE_EMPTY, p1Info, CARD_TEMPLATE_EMPTY, p1graveyard}, BLOCK_HEIGHT);
-    printRow({CENTRE_GRAPHIC}, 10);
-    printRow({p2ritual, CARD_TEMPLATE_EMPTY, p2Info, CARD_TEMPLATE_EMPTY, p2graveyard}, BLOCK_HEIGHT);
-    printRow(p2Minions, BLOCK_HEIGHT);
+    print(p1Minions, BLOCK_HEIGHT);
+    print({p1ritual, CARD_TEMPLATE_EMPTY, p1Info, CARD_TEMPLATE_EMPTY, p1graveyard}, BLOCK_HEIGHT);
+    print({CENTRE_GRAPHIC}, BLOCK_HEIGHT - 1);
+    print({p2ritual, CARD_TEMPLATE_EMPTY, p2Info, CARD_TEMPLATE_EMPTY, p2graveyard}, BLOCK_HEIGHT);
+    print(p2Minions, BLOCK_HEIGHT);
 }
 
 void Board::displayHand(Player& player) const {
@@ -75,5 +75,5 @@ void Board::displayHand(Player& player) const {
         return;
     }
 
-    printRow(handGraphics, BLOCK_HEIGHT);
+    print(handGraphics, BLOCK_HEIGHT);
 }
