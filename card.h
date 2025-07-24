@@ -21,6 +21,7 @@ public:
     virtual card_template_t display() const = 0;
     std::string getName() const;
     int getCost() const;
+    const std::string &getDescription() const;
 };
 
 #endif

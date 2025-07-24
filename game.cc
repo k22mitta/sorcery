@@ -73,6 +73,7 @@ void Game::processCommand(const std::string &line) {
     } else if (cmd == "end") {
         // placeholder, "end" already processed at Game::start()
     } else if (cmd == "quit") {
+        std::cout << "Game Over!" << std::endl;
         std::exit(EXIT_SUCCESS);
     } else if (cmd == "attack") {
         int i, j = -1;
