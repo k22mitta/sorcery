@@ -53,6 +53,7 @@ void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
     auto &board = player.getBoard();
     if (graveyard.empty() || board.size() >= 5) {
         std::cerr << "Graveyard is empty or board is full" << std::endl;
+        return;
     }
     std::unique_ptr<Card> card = std::move(graveyard.back());
     graveyard.pop_back();
