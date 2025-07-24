@@ -156,12 +156,14 @@ Ritual *Player::getRitual() { return dynamic_cast<Ritual *>(ritual.get()); }
 
 void Player::destroyMinion(int index) {
     if (index >= 0 && index < static_cast<int>(board.size())) {
+        std::cout << board[index]->getName() << "died" << std::endl;
         graveyard.emplace_back(std::move(board[index]));
         board.erase(board.begin() + index);
     }
 }
 
 void Player::removeRitual() {
+    std::cout << ritual.getName() << "removed" << std::endl;
     ritual.reset();
 }
 
