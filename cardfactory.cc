@@ -34,7 +34,7 @@ std::unique_ptr<Card> CardFactory::createCard(const std::string &name) {
     else if (name == "Unsummon") return std::make_unique<Unsummon>();
     else if (name == "Recharge") return std::make_unique<Recharge>();
     else if (name == "Disenchant") return std::make_unique<Disenchant>();
-    else if (name == "RaiseDead") return std::make_unique<RaiseDead>();
+    else if (name == "Raise Dead") return std::make_unique<RaiseDead>();
     else if (name == "Blizzard") return std::make_unique<Blizzard>();
     else {
         std::cerr << "Unknown card name: " << name << std::endl;

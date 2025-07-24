@@ -122,6 +122,14 @@ void Banish::effect(Game *game, int targetPlayer, int targetCard) {
     }
 }
 void Unsummon::effect(Game *game, int targetPlayer, int targetIndex) {
+    auto &player = game -> getPlayer(targetPlayer);
+    auto &board = player.getBoard();
+    auto &hand = player.getHand();
+    if (targetIndex < 1 || targetIndex > board.size() || hand.size() >= 5) return;
+
+    std::unique_ptr<Card> card = std::move(board[targetIndex - 1]);
+    board.erase(board.begin() + (targetIndex - 1));
+    hand.emplace_back(std::move(card));
 }
 void Recharge::effect(Game *game, int targetPlayer, int targetCard) {
     auto ritual = game->getPlayer(targetPlayer).getRitual();
@@ -133,13 +141,22 @@ void Disenchant::effect(Game *game, int targetPlayer, int targetCard) {
     // TODO
 }
 void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
-    // TODO
+    auto &player = game -> getPlayer(targetPlayer);
+    auto &graveyard = player.getGraveyard();
+    auto &board = player.getBoard();
+    if (graveyard.empty() || board.size() >= 5) return;
+    std::unique_ptr<Card> card = std::move(graveyard.back());
+    graveyard.pop_back();
+    Minion *minion = dynamic_cast<Minion*>(card.get());
+    minion->setDefense(1);
+    board.emplace_back(std::move(card));
 }
 void Blizzard::effect(Game *game, int targetPlayer, int targetCard) {
     for (int p = 0; p < 2; p++) {
         auto &player = game -> getPlayer(p);
         for (size_t i = 0; i < player.getBoard().size(); i++) {
-            auto &minion = player.getBoard()[i];
+            Card *card = player.getBoard()[i].get();
+            Minion *minion = dynamic_cast<Minion*>(card);
             minion -> setDefense(minion->getDefense() - 2);
             if (minion->getDefense() <= 0) {
                 player.destroyMinion(i);

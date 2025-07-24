@@ -23,7 +23,7 @@ void Player::drawInitialHand() {
 }
 
 void Player::playCard(int index, int targetPlayer, int targetCard) {
-    if (index < 1 || index > static_cast<int>(hand.size())) {
+    if (index < 1 || index > hand.size()) {
         std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
@@ -47,19 +47,8 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             
         case CardType::Spell: {
             Spell *spell = dynamic_cast<Spell *>(currentCard.get());
-            if (!spell) {
-                std::cerr << "Error: Card type is Spell but dynamic_cast failed.\n";
-                return;
-            }
-
-            if (targetPlayer != -1 && targetCard != -1) {
-                spell->effect(game, targetPlayer, targetCard);
-            } else {
-                spell->effect(game, -1, -1);
-            }
-
+            spell->effect(game, targetPlayer, targetCard);
             std::cout << name << " played spell: " << spell->getName() << std::endl;
-
             break;
         }
 
