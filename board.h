@@ -5,6 +5,7 @@
 #include "player.h"
 
 #define BLOCK_HEIGHT 11
+#define BLOCK_WIDTH 31
 
 class Board {
     std::unique_ptr<Player> player1;

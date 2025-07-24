@@ -1,13 +1,15 @@
 #include "player.h"
 #include "minion.h"
+#include "ritual.h"
+#include "spell.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
 #include <chrono>
 #include <iomanip>
 
-Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
-    : name{name}, id{id}, deck{std::move(deck)} {}
+Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck, Game *game)
+    : name{name}, id{id}, deck{std::move(deck)}, game{game} {}
 
 void Player::drawCard() {
     if (hand.size() < 5 && !deck.empty()) {
@@ -33,7 +35,7 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
     }
     changeMagic(-currentCard->getCost());
     switch (currentCard->getType()) {
-        case CardType::Minion:
+        case CardType::Minion: {
             if (board.size() >= 5) {
                 std::cout << "Board full!" << std::endl;
                 return;
@@ -41,19 +43,36 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             std::cout << name << " placed " << currentCard->getName() << std::endl;
             board.emplace_back(std::move(currentCard));
             break;
+        }
+            
+        case CardType::Spell: {
+            Spell *spell = dynamic_cast<Spell *>(currentCard.get());
+            if (!spell) {
+                std::cerr << "Error: Card type is Spell but dynamic_cast failed.\n";
+                return;
+            }
 
-        case CardType::Spell:
-            std::cout << "spell is not allowed to be played on board" << std::endl;
-            return;
+            if (targetPlayer != -1 && targetCard != -1) {
+                spell->effect(game, targetPlayer, targetCard);
+            } else {
+                spell->effect(game, -1, -1);
+            }
 
-        case CardType::Ritual:
+            std::cout << name << " played spell: " << spell->getName() << std::endl;
+
+            break;
+        }
+
+        case CardType::Ritual: {
             ritual = std::move(hand[index - 1]);
             std::cout << name << " played ritual: " << ritual->getName() << std::endl;
             break;
+        }
 
-        case CardType::Enchantment:
+        case CardType::Enchantment: {
             std::cout << "enchantment is not allowed to be played on board" << std::endl;
             return;
+        }
     }
     hand.erase(hand.begin() + (index - 1));
 }
@@ -138,10 +157,10 @@ void Player::changeMagic(int delta) { magic += delta; }
 std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
 std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
-Card *Player::getRitual() { return ritual.get(); }
+Game *Player::getGame() { return game; }
+Ritual *Player::getRitual() { return dynamic_cast<Ritual *>(ritual.get()); }
 
 void Player::display(int line, int whichPlayer) const {
-    const int BLOCK_WIDTH = 31;
     int frontNamePad = (BLOCK_WIDTH - 2 - name.length()) / 2;
     int backNamePad = (BLOCK_WIDTH - 2 - name.length()) % 2;
     if (line == 0 || line == 10) {
@@ -162,7 +181,6 @@ void Player::display(int line, int whichPlayer) const {
 }
 
 void Player::displayHand() const {
-    const int BLOCK_HEIGHT = 11;
     std::cout << hand.size() << std::endl;
     for (int i = 0; i < BLOCK_HEIGHT; i++) {
         std::cout << '|';
@@ -173,7 +191,7 @@ void Player::displayHand() const {
     }
 }
 
-void Player::destoryMinion(int index) {
+void Player::destroyMinion(int index) {
     if (index >= 0 && index < static_cast<int>(board.size())) {
         graveyard.emplace_back(std::move(board[index]));
         board.erase(board.begin() + index);
