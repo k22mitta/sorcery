@@ -1,13 +1,15 @@
 #include "player.h"
 #include "minion.h"
+#include "ritual.h"
+#include "spell.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
 #include <chrono>
 #include <iomanip>
 
-Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck)
-    : name{name}, id{id}, deck{std::move(deck)} {}
+Player::Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck, Game *game)
+    : name{name}, id{id}, deck{std::move(deck)}, game{game} {}
 
 void Player::drawCard() {
     if (hand.size() < 5 && !deck.empty()) {
@@ -16,25 +18,29 @@ void Player::drawCard() {
     }
 }
 
-void Player::drawInitialHand() {
-    for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
-    drawRitual();
+void Player::drawInitialHand(bool isTestingMode) {
+    for (int i = 0; i < 5; i++) shuffleAndDraw(isTestingMode, 12345);
 }
 
-void Player::playCard(int index, int targetPlayer, int targetCard) {
-    if (index < 1 || index > static_cast<int>(hand.size())) {
+void Player::playCard(int index, int targetPlayer, int targetCard, bool isTestingMode) {
+    if (index < 1 || index > hand.size()) {
         std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
     }
     auto &currentCard = hand[index - 1];
-    if (currentCard->getCost() > magic) {
-        std::cout << "No enough magic " << std::endl;
-        return;
+    if (currentCard->getCost() <= magic) {
+        changeMagic(-currentCard->getCost());
+    } else {
+        if (isTestingMode && currentCard->getType() == CardType::Spell) {
+            changeMagic(-getMagic());
+        } else {
+            std::cout << "No enough magic " << std::endl;
+            return;
+        }
     }
-    changeMagic(-currentCard->getCost());
     switch (currentCard->getType()) {
-        case CardType::Minion:
+        case CardType::Minion: {
             if (board.size() >= 5) {
                 std::cout << "Board full!" << std::endl;
                 return;
@@ -42,43 +48,50 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
             std::cout << name << " placed " << currentCard->getName() << std::endl;
             board.emplace_back(std::move(currentCard));
             break;
-
-        case CardType::Spell:
-            std::cout << "spell is not allowed to be played on board" << std::endl;
-            return;
-
-        case CardType::Ritual:
-            ritual = std::move(currentCard);
+        }
+            
+        case CardType::Spell: {
+            Spell *spell = dynamic_cast<Spell*>(currentCard.get());
+            spell->effect(game, targetPlayer, targetCard);
+            std::cout << name << " played spell: " << spell->getName() << std::endl;
             break;
+        }
 
-        case CardType::Enchantment:
+        case CardType::Ritual: {
+            ritual = std::move(hand[index - 1]);
+            std::cout << name << " played ritual: " << ritual->getName() << std::endl;
+            break;
+        }
+
+        case CardType::Enchantment: {
             std::cout << "enchantment is not allowed to be played on board" << std::endl;
             return;
+        }
     }
     hand.erase(hand.begin() + (index - 1));
 }
 
-void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
-    if (whoAttack < 1 || whoAttack > static_cast<int>(board.size())) {
+void Player::attack(int attackerIdx, int defenserIdx, Player &opponent) {
+    if (attackerIdx < 1 || attackerIdx > static_cast<int>(board.size())) {
         std::cout << "Invalid attacker" << std::endl;
         return;
     }
-    Card *attackCard = board[whoAttack - 1].get();
+    Card *attackCard = board[attackerIdx - 1].get();
     Minion *attacker = dynamic_cast<Minion*>(attackCard);
     if (!attacker->canAct()) {
         std::cout << attacker->getName() << " cannot act" << std::endl;
         return;
     }
     attacker->spendAction();
-    if (whoAttacked == -1) {
+    if (defenserIdx == -1) {
         std::cout << "attacks opponent directly" << std::endl;
         opponent.changeLife(-attacker->getAttack());
     } else {
-        if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.board.size())) {
+        if (defenserIdx < 1 || defenserIdx > static_cast<int>(opponent.board.size())) {
             std::cout << "Invalid target minion index" << std::endl;
             return;
         }
-        Card *targetCard = opponent.board[whoAttacked - 1].get();
+        Card *targetCard = opponent.board[defenserIdx - 1].get();
         Minion *target = dynamic_cast<Minion*>(targetCard);
         if (!target) {
             std::cout << "Target card is not a minion" << std::endl;
@@ -89,19 +102,19 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
         target->setDefense(target->getDefense() - attacker->getAttack());
 
         if (attacker->getDefense() <= 0) {
-            graveyard.emplace_back(std::move(board[whoAttack - 1]));
-            board.erase(board.begin() + (whoAttack - 1));
+            graveyard.emplace_back(std::move(board[attackerIdx - 1]));
+            board.erase(board.begin() + (attackerIdx - 1));
         }
         if (target->getDefense() <= 0) {
-            opponent.graveyard.emplace_back(std::move(opponent.board[whoAttacked - 1]));
-            opponent.board.erase(opponent.board.begin() + (whoAttacked - 1));
+            opponent.graveyard.emplace_back(std::move(opponent.board[defenserIdx - 1]));
+            opponent.board.erase(opponent.board.begin() + (defenserIdx - 1));
         }
     }
 }
 
 void Player::startTurn() {
     magic++;
-    shuffleAndDraw(false, 12345);
+    drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
 
     for (auto& card : board) {
@@ -130,16 +143,6 @@ void Player::shuffleAndDraw(bool testingMode, unsigned seed) {
     }
 }
 
-void Player::drawRitual() {
-    for (auto it = deck.begin(); it != deck.end(); ++it) {
-        if ((*it)->getType() == CardType::Ritual) {
-            ritual = std::move(*it);
-            deck.erase(it);
-            break;
-        }
-    }
-}
-
 std::string Player::getName() const { return name; }
 int Player::getLife() const { return life; }
 int Player::getMagic() const { return magic; }
@@ -148,37 +151,26 @@ void Player::changeMagic(int delta) { magic += delta; }
 std::vector<std::unique_ptr<Card>> &Player::getHand() { return hand; }
 std::vector<std::unique_ptr<Card>> &Player::getBoard() { return board; }
 std::vector<std::unique_ptr<Card>> &Player::getGraveyard() { return graveyard; }
-Card *Player::getRitual() { return ritual.get(); }
+Game *Player::getGame() { return game; }
+Ritual *Player::getRitual() { return dynamic_cast<Ritual *>(ritual.get()); }
 
-void Player::display(int line, int whichPlayer) const {
-    const int BLOCK_WIDTH = 31;
-    int frontNamePad = (BLOCK_WIDTH - 2 - name.length()) / 2;
-    int backNamePad = (BLOCK_WIDTH - 2 - name.length()) % 2;
-    if (line == 0 || line == 10) {
-        std::cout << "|-------------------------------|";
+void Player::destroyMinion(int index) {
+    if (index >= 0 && index < static_cast<int>(board.size())) {
+        std::cout << board[index]->getName() << "died" << std::endl;
+        graveyard.emplace_back(std::move(board[index]));
+        board.erase(board.begin() + index);
     }
-    else if (whichPlayer == 1 && line == 3
-          || whichPlayer == 2 && line == 7)  {
-        std::cout << "| " << std::string(frontNamePad, ' ') << name << std::string(frontNamePad + backNamePad, ' ') << " |";
-    } else if (whichPlayer == 1 && line == 8
-          || whichPlayer == 2 && line == 2)  {
-        std::cout << "|------                   ------|";
-    } else if (whichPlayer == 1 && line == 9
-          || whichPlayer == 2 && line == 1)  {
-        std::cout << "| " << std::setw(3) << life << " |                   | " << std::setw(3) << magic << " |";
-    } else {
-        std::cout << "|                               |";
-    } 
 }
 
-void Player::displayHand() const {
-    const int BLOCK_HEIGHT = 11;
-    std::cout << hand.size() << std::endl;
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        for (int j = 0; j < hand.size(); j++) {
-            hand[j]->display(i);
-        }
-        std::cout << '|' << std::endl;
+void Player::removeRitual() {
+    std::cout << ritual->getName() << "removed" << std::endl;
+    ritual.reset();
+}
+
+void Player::discardCard(int index) {
+    if (index < 1 || index > hand.size()) {
+        std::cerr << "Wrong index" << std::endl;
+    } else {
+        hand.erase(hand.begin() + index - 1);
     }
 }

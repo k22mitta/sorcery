@@ -2,14 +2,14 @@
 #include <iostream>
 #include <iomanip>
 
-Enchantment::Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target)
-    : Minion{name, cost, 0, 0}, target{std::move(target)} {}
+Enchantment::Enchantment(const std::string &name, int cost, std::string description, std::unique_ptr<Minion> target)
+    : Minion{name, cost, description, 0, 0}, target{std::move(target)} {}
 
 CardType Enchantment::getType() const {
     return CardType::Enchantment;
 }
 
-void Enchantment::display(int line) const {
+card_template_t Enchantment::display() const {
 }
 
 void Enchantment::setStatOverride(int atk, int def) {

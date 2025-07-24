@@ -1,4 +1,5 @@
 #include "board.h"
+#include "ritual.h"
 #include <iostream>
 
 Board::Board(std::unique_ptr<Player> p1, std::unique_ptr<Player> p2)
@@ -12,92 +13,67 @@ Player &Board::getOpponent(int id) {
     return (id == 1) ? *player2 : *player1;
 }
 
-void Board::displayEmptyBlock(int line) const {
-    if (line == 0 || line == BLOCK_HEIGHT - 1) std::cout << "|-------------------------------|";
-    else std::cout << "|                               |";
+void Board::print(const std::vector<card_template_t> &cards, int height) const {
+    for (int line = 0; line < height; line++) {
+        for (const auto &card : cards) {
+            std::cout << card[line];
+        }
+        std::cout << std::endl;
+    }
 }
 
 void Board::display() const {
-    std::cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        // displayEmptyBlock(i);
-        player1->getRitual() ? player1->getRitual()->display(i) : displayEmptyBlock(i);
-        std::cout << "                                 ";
-        player1->display(i, 1);
-        std::cout << "                                 ";
-        player1->getGraveyard().size() == 0 ? displayEmptyBlock(i) : player1->getGraveyard().front()->display(i);
-        std::cout << '|' << std::endl;
+    const int BOARD_LIMIT = 5;
+
+    std::vector<card_template_t> p1Minions;
+    std::vector<card_template_t> p2Minions;
+
+    Player& p1 = *player1;
+    Player& p2 = *player2;
+
+    auto &p1Board = player1->getBoard();
+    auto &p2Board = player2->getBoard();
+
+    card_template_t p1ritual = p1.getRitual() ? p1.getRitual()->display() : CARD_TEMPLATE_BORDER;
+    card_template_t p1graveyard = !p1.getGraveyard().empty() ? p1.getGraveyard().back()->display() : CARD_TEMPLATE_BORDER;
+
+    card_template_t p2ritual = p2.getRitual() ? p2.getRitual()->display() : CARD_TEMPLATE_BORDER;
+    card_template_t p2graveyard = !p2.getGraveyard().empty() ? p2.getGraveyard().back()->display() : CARD_TEMPLATE_BORDER;
+
+    card_template_t p1Info = display_player_card(1, p1.getName(), p1.getLife(), p1.getMagic());
+    card_template_t p2Info = display_player_card(2, p2.getName(), p2.getLife(), p2.getMagic());
+
+    for (const auto &minion : p1Board) {
+        p1Minions.emplace_back(minion->display());
     }
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        for (int j = 0; j < 5; j++) {
-            j < player1->getBoard().size() ? player1->getBoard()[j]->display(i) : displayEmptyBlock(i);
-        }
-        std::cout << '|' << std::endl;
+    while (p1Minions.size() < BOARD_LIMIT) {
+        p1Minions.push_back(CARD_TEMPLATE_BORDER);
     }
-    std::cout << "|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|" << std::endl;
-    std::cout << "|                                                                 _____                                                                                               |" << std::endl;
-    std::cout << "|                                                                / ____|                                                                                              |" << std::endl;
-    std::cout << "|                                                               | (___   ___  _ __ ___ ___ _ __ _   _                                                                 |" << std::endl;
-    std::cout << "|                                                                \\___ \\ / _ \\| '__/ __/ _ \\ '__| | | |                                                                |" << std::endl;
-    std::cout << "|                                                                ____) | (_) | | | (_|  __/ |  | |_| |                                                                |" << std::endl;
-    std::cout << "|                                                               |_____/ \\___/|_|  \\___\\___|_|   \\__, |                                                                |" << std::endl;
-    std::cout << "|                                                                                                __/ |                                                                |" << std::endl;
-    std::cout << "|                                                                                               |___/                                                                 |" << std::endl;
-    std::cout << "|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|" << std::endl;
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        for (int j = 0; j < 5; j++) {
-            j < player2->getBoard().size() ? player2->getBoard()[j]->display(i) : displayEmptyBlock(i);
-        }
-        std::cout << '|' << std::endl;
+    for (const auto &minion : p2Board) {
+        p2Minions.emplace_back(minion->display());
     }
-    for (int i = 0; i < BLOCK_HEIGHT; i++) {
-        std::cout << '|';
-        // displayEmptyBlock(i);
-        player2->getRitual() ? player2->getRitual()->display(i) : displayEmptyBlock(i);
-        std::cout << "                                 ";
-        player2->display(i, 2);
-        std::cout << "                                 ";
-        player2->getGraveyard().size() == 0 ? displayEmptyBlock(i) : player2->getGraveyard().front()->display(i);
-        std::cout << '|' << std::endl;
+    while (p2Minions.size() < BOARD_LIMIT) {
+        p2Minions.push_back(CARD_TEMPLATE_BORDER);
     }
-    std::cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+
+    print(p1Minions, BLOCK_HEIGHT);
+    print({p1ritual, CARD_TEMPLATE_EMPTY, p1Info, CARD_TEMPLATE_EMPTY, p1graveyard}, BLOCK_HEIGHT);
+    print({CENTRE_GRAPHIC}, BLOCK_HEIGHT - 1);
+    print({p2ritual, CARD_TEMPLATE_EMPTY, p2Info, CARD_TEMPLATE_EMPTY, p2graveyard}, BLOCK_HEIGHT);
+    print(p2Minions, BLOCK_HEIGHT);
 }
 
+void Board::displayHand(Player& player) const {
+    std::vector<card_template_t> handGraphics;
 
-void Board::start_turn(int player_id, Game &game) {
-    Player &p = getPlayer(player_id);
-    if (auto ritual = dynamic_cast<Ritual*>(p.getRitual())) {
-        ritual->trigger(game);
+    for (const auto& card : player.getHand()) {
+        handGraphics.push_back(card->display());
     }
-    for (auto &card : p.getBoard()) {
-        Minion *m = dynamic_cast<Minion*>(card.get());
-        if (m && m->getAbility()) m->getAbility()->execute(game);
+
+    if (handGraphics.empty()) {
+        std::cout << "Hand is empty." << std::endl;
+        return;
     }
+
+    print(handGraphics, BLOCK_HEIGHT);
 }
-
-void Board::end_turn(int player_id, Game &game) {
-    Player &p = getPlayer(player_id);
-    for (auto &card : p.getBoard()) {
-        Minion *m = dynamic_cast<Minion*>(card.get());
-        if (m && m->getAbility()) m->getAbility()->execute(game);
-    }
-}
-
-void Board::minion_enter(int player_id, Game &game) {
-    Player &p = getPlayer(player_id);
-    if (auto ritual = dynamic_cast<Ritual*>(p.getRitual())) {
-        ritual->trigger(game);
-    }
-}
-
-void Board::minion_leave(int player_id, Game &game) {
-    Player &p = getPlayer(player_id);
-    for (auto &card : p.getBoard()) {
-        Minion *m = dynamic_cast<Minion*>(card.get());
-        if (m && m->getAbility()) m->getAbility()->execute(game);
-    }
-}
-

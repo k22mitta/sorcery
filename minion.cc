@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iomanip>
 
-Minion::Minion(const std::string &name, int cost, int atk, int def)
-    : Card{name, cost}, atk{atk}, def{def}, actions{0} {}
+Minion::Minion(const std::string &name, int cost, std::string description, int atk, int def)
+    : Card{name, cost, description}, atk{atk}, def{def}, actions{0} {}
 
 CardType Minion::getType() const { return CardType::Minion; }
 
@@ -22,6 +22,7 @@ void Minion::setAbility(std::unique_ptr<Ability> ability) { this -> ability = st
 
 AirElemental::AirElemental(): Minion{"Air Elemental", 0, "", 1, 1} {}
 EarthElemental::EarthElemental(): Minion{"Earth Elemental", 3, "", 4, 4} {}
+
 BoneGolem::BoneGolem()
   : Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion dies", 1, 3}
 {
@@ -69,299 +70,21 @@ card_template_t Minion::display() const {
     return display_minion_no_ability(name, cost, atk, def);
 }
 
-void AirElemental::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Air Elemental           |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
+BoneGolem::BoneGolem(): Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion leaves play.", 1, 3} {}
+FireElemental::FireElemental(): Minion{"Fire Elemental", 2, "Whenever an opponent's minion enters play, deal 1 damage to it.", 2, 2} {}
+PotionSeller::PotionSeller(): Minion{"Potion Seller", 2, "At the end of your turn, all your minions gain +0/+1.", 1, 3} {}
+NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, "Deal 1 damage to target minion", 0, 1} {}
+ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, "Summon a 1/1 air elemental", 1, 1} {}
+MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, "Summon up to three 1/1 air elementals", 2, 3} {}
+
+
+card_template_t Minion::display() const {
+    /*
+    if (ability) {
+        return display_minion_activated_ability(name, cost, atk, def, abilityCost, abilityDesc);
+    } else {
+        return display_minion_no_ability(name, cost, atk, def);
     }
-}
-void EarthElemental::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Earth Elemental         |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void BoneGolem::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Bone Golem              |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void FireElemental::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Fire Elemental          |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void PotionSeller::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Potion Seller           |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void NovicePyromancer::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Novice Pyromancer       |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void ApprenticeSummoner::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Apprentice Summoner     |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
-}
-void MasterSummoner::display(int line) const {
-    switch(line) {
-        case 0:
-            std::cout << "|-------------------------------|";
-            break;
-        case 1:
-            std::cout << "| Master Summoner         |" << std::setw(5) << cost << "|";
-            break;
-        case 2:
-            std::cout << "|-------------------------------|";
-            break;
-        case 3: 
-            std::cout << "|                        Minion |";
-            break;
-        case 4:
-            std::cout << "|-------------------------------|";
-            break;
-        case 5:
-            std::cout << "|                               |";
-            break;
-        case 6:
-            std::cout << "|                               |";
-            break;
-        case 7:
-            std::cout << "|                               |";
-            break;
-        case 8:
-            std::cout << "|------                   ------|";
-            break;
-        case 9:
-            std::cout << "| " << std::setw(3) << atk << " |                   | " << std::setw(3) << def << " |";
-            break;
-        case 10:
-            std::cout << "|-------------------------------|";
-            break;
-    }
+    */
+    return display_minion_no_ability(name, cost, atk, def);
 }

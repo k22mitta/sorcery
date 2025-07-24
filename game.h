@@ -6,6 +6,7 @@
 #include <string>
 #include "player.h"
 #include "board.h"
+#include "ascii_graphics.h"
 
 class Game {
     std::unique_ptr<Board> board;
@@ -24,6 +25,7 @@ public:
     void processCommand(const std::string &line);
     Player &getCurrentPlayer();
     Player &getOtherPlayer();
+    Player &getPlayer(int index);
     void togglePlayer();
     bool isTestingMode() const;
 };

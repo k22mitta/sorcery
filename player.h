@@ -5,12 +5,17 @@
 #include <vector>
 #include <memory>
 #include "card.h"
+#include "ascii_graphics.h"
+
+class Ritual;
+class Game;
 
 class Player {
     std::string name;
     int id;
     int life = 20;
     int magic = 3;
+    Game *game;
     std::vector<std::unique_ptr<Card>> hand;
     std::vector<std::unique_ptr<Card>> deck;
     std::vector<std::unique_ptr<Card>> graveyard;
@@ -18,16 +23,16 @@ class Player {
     std::unique_ptr<Card> ritual;
 
 public:
-    Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck);
+    Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck, Game *game);
 
     void drawCard();
-    void drawInitialHand();
-    void playCard(int index, int targetPlayer, int targetCard);
+    void drawInitialHand(bool isTestingMode);
+    void playCard(int index, int targetPlayer, int targetCard, bool isTestingMode);
     void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
     void shuffleAndDraw(bool testingMode, unsigned seed);
-    void drawRitual();
+    void discardCard(int index);
 
     std::string getName() const;
     int getLife() const;
@@ -37,10 +42,11 @@ public:
     std::vector<std::unique_ptr<Card>> &getHand();
     std::vector<std::unique_ptr<Card>> &getBoard();
     std::vector<std::unique_ptr<Card>> &getGraveyard();
-    Card *getRitual();
-    void display(int line, int whichPlayer) const;
+    Game *getGame();
+    Ritual *getRitual();
 
-    void displayHand() const;
+    void destroyMinion(int index);
+    void removeRitual();
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define ENCHANTMENT_H
 
 #include "minion.h"
+#include "ascii_graphics.h"
 #include <memory>
 
 class Enchantment : public Minion {
@@ -13,10 +14,10 @@ class Enchantment : public Minion {
     int newDefense = 0;
 
 public:
-    Enchantment(const std::string &name, int cost, std::unique_ptr<Minion> target);
+    Enchantment(const std::string &name, int cost, std::string description, std::unique_ptr<Minion> target);
 
     CardType getType() const override;
-    void display(int line) const override;
+    card_template_t display() const override;
 
     void setStatOverride(int atk, int def);
     void setStatModifier(int atkDelta, int defDelta);
