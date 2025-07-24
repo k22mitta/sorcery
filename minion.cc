@@ -1,4 +1,5 @@
 #include "minion.h"
+#include "minion_abilities.h"
 #include <iostream>
 #include <iomanip>
 
