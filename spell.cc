@@ -133,13 +133,27 @@ void Disenchant::effect(Game *game, int targetPlayer, int targetCard) {
     // TODO
 }
 void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
-    // TODO
+    auto &player = game -> getPlayer(targetPlayer);
+    auto &graveyard = player.getGraveyard();
+    auto &board = player.getBoard();
+    if (graveyard.empty() || board.size() >= 5) {
+        std::cout << "move failed" << std::endl;
+        std::cout << graveyard.empty() << std::endl;
+        std::cout << board.size() << std::endl;
+        return;
+    }
+    std::unique_ptr<Card> card = std::move(graveyard.back());
+    graveyard.pop_back();
+    Minion *minion = dynamic_cast<Minion*>(card.get());
+    minion->setDefense(1);
+    board.emplace_back(std::move(card));
 }
 void Blizzard::effect(Game *game, int targetPlayer, int targetCard) {
     for (int p = 0; p < 2; p++) {
         auto &player = game -> getPlayer(p);
         for (size_t i = 0; i < player.getBoard().size(); i++) {
-            auto &minion = player.getBoard()[i];
+            Card *card = player.getBoard()[i].get();
+            Minion *minion = dynamic_cast<Minion*>(card);
             minion -> setDefense(minion->getDefense() - 2);
             if (minion->getDefense() <= 0) {
                 player.destroyMinion(i);

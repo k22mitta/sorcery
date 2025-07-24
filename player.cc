@@ -52,7 +52,9 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
                 return;
             }
 
-            if (targetPlayer != -1 && targetCard != -1) {
+            if (targetPlayer != -1) {
+                spell->effect(game, targetPlayer, -1);
+            } else if (targetPlayer != -1 && targetCard != -1) {
                 spell->effect(game, targetPlayer, targetCard);
             } else {
                 spell->effect(game, -1, -1);
