@@ -3,6 +3,8 @@
 
 #include "ability.h"
 #include "card.h"
+#include "ascii_graphics.h"
+#include <memory>
 
 class Minion : public Card {
 protected:
