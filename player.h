@@ -6,11 +6,15 @@
 #include <memory>
 #include "card.h"
 
+class Ritual;
+class Game;
+
 class Player {
     std::string name;
     int id;
     int life = 20;
     int magic = 3;
+    Game *game;
     std::vector<std::unique_ptr<Card>> hand;
     std::vector<std::unique_ptr<Card>> deck;
     std::vector<std::unique_ptr<Card>> graveyard;
@@ -18,7 +22,7 @@ class Player {
     std::unique_ptr<Card> ritual;
 
 public:
-    Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck);
+    Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck, Game *game);
 
     void drawCard();
     void drawInitialHand();
@@ -36,11 +40,12 @@ public:
     std::vector<std::unique_ptr<Card>> &getHand();
     std::vector<std::unique_ptr<Card>> &getBoard();
     std::vector<std::unique_ptr<Card>> &getGraveyard();
-    Card *getRitual();
+    Game *getGame();
+    Ritual *getRitual();
     void display(int line, int whichPlayer) const;
     void displayHand() const;
 
-    void destoryMinion(int index);
+    void destroyMinion(int index);
     void removeRitual();
 };
 

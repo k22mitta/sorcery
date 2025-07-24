@@ -1,4 +1,5 @@
 #include "board.h"
+#include "ritual.h"
 #include <iostream>
 
 Board::Board(std::unique_ptr<Player> p1, std::unique_ptr<Player> p2)

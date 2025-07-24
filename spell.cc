@@ -1,4 +1,6 @@
 #include "spell.h"
+#include "game.h"
+#include "ritual.h"
 #include <iostream>
 #include <iomanip>
 
@@ -110,21 +112,39 @@ void Blizzard::display(int line) const {
 }
 
 
-void Banish::effect(Game &game, int targetPlayer, int targetCard) {
+void Banish::effect(Game *game, int targetPlayer, int targetCard) {
+    targetCard--;
+    auto &p = game->getPlayer(targetPlayer);
+    if (targetCard == 6) {
+        p.removeRitual();
+    } else {
+        p.destroyMinion(targetCard);
+    }
+}
+void Unsummon::effect(Game *game, int targetPlayer, int targetIndex) {
+}
+void Recharge::effect(Game *game, int targetPlayer, int targetCard) {
+    auto ritual = game->getPlayer(targetPlayer).getRitual();
+    if (ritual) {
+        ritual->addCharges(3);
+    }
+}
+void Disenchant::effect(Game *game, int targetPlayer, int targetCard) {
     // TODO
 }
-void Unsummon::effect(Game &game, int targetPlayer, int targetCard) {
+void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
     // TODO
 }
-void Recharge::effect(Game &game, int targetPlayer, int targetCard) {
-    // TODO
-}
-void Disenchant::effect(Game &game, int targetPlayer, int targetCard) {
-    // TODO
-}
-void RaiseDead::effect(Game &game, int targetPlayer, int targetCard) {
-    // TODO
-}
-void Blizzard::effect(Game &game, int targetPlayer, int targetCard) {
-    // TODO
+void Blizzard::effect(Game *game, int targetPlayer, int targetCard) {
+    for (int p = 0; p < 2; p++) {
+        auto &player = game -> getPlayer(p);
+        for (size_t i = 0; i < player.getBoard().size(); i++) {
+            auto &minion = player.getBoard()[i];
+            minion -> setDefense(minion->getDefense() - 2);
+            if (minion->getDefense() <= 0) {
+                player.destroyMinion(i);
+                i--;
+            }
+        }
+    }
 }

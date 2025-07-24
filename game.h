@@ -24,6 +24,7 @@ public:
     void processCommand(const std::string &line);
     Player &getCurrentPlayer();
     Player &getOtherPlayer();
+    Player &getPlayer(int idx);
     void togglePlayer();
     bool isTestingMode() const;
 };

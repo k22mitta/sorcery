@@ -33,8 +33,8 @@ void Game::init(const std::string &initFile) {
     std::getline(*in, name1);
     std::getline(*in, name2);
 
-    auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1));
-    auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2));
+    auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1), this);
+    auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2), this);
 
     p1->drawInitialHand();
     p2->drawInitialHand();
@@ -96,6 +96,10 @@ void Game::processCommand(const std::string &line) {
     } else {
         std::cerr << "Unknown command." << std::endl;
     }
+}
+
+Player &Game::getPlayer(int idx) {
+    return board->getPlayer(idx);
 }
 
 Player &Game::getCurrentPlayer() {
