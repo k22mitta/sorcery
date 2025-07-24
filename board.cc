@@ -43,14 +43,14 @@ void Board::display() const {
     card_template_t p1Info = display_player_card(1, p1.getName(), p1.getLife(), p1.getMagic());
     card_template_t p2Info = display_player_card(2, p2.getName(), p2.getLife(), p2.getMagic());
 
-    for (const auto& m : p1Board) {
-        p1Minions.emplace_back(m->display());
+    for (const auto &minion : p1Board) {
+        p1Minions.emplace_back(minion->display());
     }
     while (p1Minions.size() < BOARD_LIMIT) {
         p1Minions.push_back(CARD_TEMPLATE_BORDER);
     }
-    for (const auto& m : p2Board) {
-        p2Minions.emplace_back(m->display());
+    for (const auto &minion : p2Board) {
+        p2Minions.emplace_back(minion->display());
     }
     while (p2Minions.size() < BOARD_LIMIT) {
         p2Minions.push_back(CARD_TEMPLATE_BORDER);

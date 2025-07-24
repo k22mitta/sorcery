@@ -26,12 +26,13 @@ public:
     Player(const std::string &name, int id, std::vector<std::unique_ptr<Card>> &&deck, Game *game);
 
     void drawCard();
-    void drawInitialHand();
-    void playCard(int index, int targetPlayer, int targetCard);
+    void drawInitialHand(bool isTestingMode);
+    void playCard(int index, int targetPlayer, int targetCard, bool isTestingMode);
     void attack(int whoAttack, int whoAttacked, Player &opponent);
     void startTurn();
     void endTurn();
     void shuffleAndDraw(bool testingMode, unsigned seed);
+    void discardCard(int index);
 
     std::string getName() const;
     int getLife() const;

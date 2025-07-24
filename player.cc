@@ -18,22 +18,27 @@ void Player::drawCard() {
     }
 }
 
-void Player::drawInitialHand() {
-    for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
+void Player::drawInitialHand(bool isTestingMode) {
+    for (int i = 0; i < 5; i++) shuffleAndDraw(isTestingMode, 12345);
 }
 
-void Player::playCard(int index, int targetPlayer, int targetCard) {
+void Player::playCard(int index, int targetPlayer, int targetCard, bool isTestingMode) {
     if (index < 1 || index > hand.size()) {
         std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
     }
     auto &currentCard = hand[index - 1];
-    if (currentCard->getCost() > magic) {
-        std::cout << "No enough magic " << std::endl;
-        return;
+    if (currentCard->getCost() <= magic) {
+        changeMagic(-currentCard->getCost());
+    } else {
+        if (isTestingMode && currentCard->getType() == CardType::Spell) {
+            changeMagic(-getMagic());
+        } else {
+            std::cout << "No enough magic " << std::endl;
+            return;
+        }
     }
-    changeMagic(-currentCard->getCost());
     switch (currentCard->getType()) {
         case CardType::Minion: {
             if (board.size() >= 5) {
@@ -46,7 +51,7 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
         }
             
         case CardType::Spell: {
-            Spell *spell = dynamic_cast<Spell *>(currentCard.get());
+            Spell *spell = dynamic_cast<Spell*>(currentCard.get());
             spell->effect(game, targetPlayer, targetCard);
             std::cout << name << " played spell: " << spell->getName() << std::endl;
             break;
@@ -109,7 +114,7 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
 
 void Player::startTurn() {
     magic++;
-    shuffleAndDraw(false, 12345);
+    drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
 
     for (auto& card : board) {
@@ -158,4 +163,12 @@ void Player::destroyMinion(int index) {
 
 void Player::removeRitual() {
     ritual.reset();
+}
+
+void Player::discardCard(int index) {
+    if (index < 1 || index > hand.size()) {
+        std::cerr << "Wrong index" << std::endl;
+    } else {
+        hand.erase(hand.begin() + index - 1);
+    }
 }
