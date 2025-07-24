@@ -1,6 +1,7 @@
 #ifndef ABILITY_H
 #define ABILITY_H
 
+#include<string>
 class Game;
 
 class Ability {
@@ -16,5 +17,14 @@ public:
     ActivatedAbility(int cost);
     int getCost() const;
 };
+
+class TriggeredAbility : public Ability {
+    std::string triggerKey;
+public:
+    explicit TriggeredAbility(std::string key) : triggerKey{std::move(key)} {}
+    const std::string &key() const { return triggerKey; }
+};
+#endif
+
 
 #endif

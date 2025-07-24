@@ -22,12 +22,61 @@ void Minion::setAbility(std::unique_ptr<Ability> ability) { this -> ability = st
 
 AirElemental::AirElemental(): Minion{"Air Elemental", 0, "", 1, 1} {}
 EarthElemental::EarthElemental(): Minion{"Earth Elemental", 3, "", 4, 4} {}
+
+BoneGolem::BoneGolem()
+  : Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion dies", 1, 3}
+{
+    setAbility(std::make_unique<BoneGolemTrigger>(this));
+}
+
+FireElemental::FireElemental()
+  : Minion{"Fire Elemental", 2, "Deal 1 damage to minion entering play", 2, 2}
+{
+    setAbility(std::make_unique<FireElementalTrigger>(this));
+}
+
+PotionSeller::PotionSeller()
+  : Minion{"Potion Seller", 2, "End of turn: friendly minions get +0/+1", 1, 3}
+{
+    setAbility(std::make_unique<PotionSellerTrigger>(this));
+}
+
+NovicePyromancer::NovicePyromancer()
+  : Minion{"Novice Pyromancer", 1, "Deal 1 damage to a minion", 0, 1}
+{
+    setAbility(std::make_unique<NovicePyromancerAbility>());
+}
+
+ApprenticeSummoner::ApprenticeSummoner()
+  : Minion{"Apprentice Summoner", 1, "Summon one Air Elemental", 1, 1}
+{
+    setAbility(std::make_unique<ApprenticeSummonerAbility>());
+}
+
+MasterSummoner::MasterSummoner()
+  : Minion{"Master Summoner", 3, "Summon up to three Air Elementals", 2, 3}
+{
+    setAbility(std::make_unique<MasterSummonerAbility>());
+}
+
+card_template_t Minion::display() const {
+    /*
+    if (ability) {
+        return display_minion_activated_ability(name, cost, atk, def, abilityCost, abilityDesc);
+    } else {
+        return display_minion_no_ability(name, cost, atk, def);
+    }
+    */
+    return display_minion_no_ability(name, cost, atk, def);
+}
+
 BoneGolem::BoneGolem(): Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion leaves play.", 1, 3} {}
 FireElemental::FireElemental(): Minion{"Fire Elemental", 2, "Whenever an opponent's minion enters play, deal 1 damage to it.", 2, 2} {}
 PotionSeller::PotionSeller(): Minion{"Potion Seller", 2, "At the end of your turn, all your minions gain +0/+1.", 1, 3} {}
 NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, "Deal 1 damage to target minion", 0, 1} {}
 ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, "Summon a 1/1 air elemental", 1, 1} {}
 MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, "Summon up to three 1/1 air elementals", 2, 3} {}
+
 
 card_template_t Minion::display() const {
     /*
