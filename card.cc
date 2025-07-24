@@ -4,3 +4,4 @@ Card::Card(const std::string &name, int cost, std::string description) : name{na
 
 std::string Card::getName() const { return name; }
 int Card::getCost() const { return cost; }
+const std::string &Card::getDescription() const { return description; }
