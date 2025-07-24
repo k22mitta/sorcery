@@ -8,12 +8,12 @@ Spell::Spell(const std::string &name, int cost, std::string description) : Card{
 
 CardType Spell::getType() const { return CardType::Spell; }
 
-Banish::Banish(): Spell{"Banish", 2, "placeholder"} {}
-Unsummon::Unsummon(): Spell{"Unsummon", 1, "placeholder"}{}
-Recharge::Recharge(): Spell{"Recharge", 1, "placeholder"} {}
-Disenchant::Disenchant(): Spell{"Disenchant", 1, "placeholder"} {}
-RaiseDead::RaiseDead(): Spell{"Raise Dead", 1, "placeholder"} {}
-Blizzard::Blizzard(): Spell{"Blizzard", 3, "placeholder"} {}
+Banish::Banish(): Spell{"Banish", 2, "Destroy target minion or ritual"} {}
+Unsummon::Unsummon(): Spell{"Unsummon", 1, "Return target minion to its owner's hand"}{}
+Recharge::Recharge(): Spell{"Recharge", 1, "Your ritual gains 3 charges"} {}
+Disenchant::Disenchant(): Spell{"Disenchant", 1, "Destroy the top enchantment on target minion"} {}
+RaiseDead::RaiseDead(): Spell{"Raise Dead", 1, "Resurrect the top minion in your graveyard and set its defence to 1"} {}
+Blizzard::Blizzard(): Spell{"Blizzard", 3, "Deal 2 damage to all minions"} {}
 
 card_template_t Spell::display() const {
     return display_spell(name, cost, description);
