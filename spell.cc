@@ -136,5 +136,15 @@ void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
     // TODO
 }
 void Blizzard::effect(Game *game, int targetPlayer, int targetCard) {
-    // TODO
+    for (int p = 0; p < 2; p++) {
+        auto &player = game -> getPlayer(p);
+        for (size_t i = 0; i < player.getBoard().size(); i++) {
+            auto &minion = player.getBoard()[i];
+            minion -> setDefense(minion->getDefense() - 2);
+            if (minion->getDefense() <= 0) {
+                player.destroyMinion(i);
+                i--;
+            }
+        }
+    }
 }
