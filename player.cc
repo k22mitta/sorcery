@@ -18,22 +18,27 @@ void Player::drawCard() {
     }
 }
 
-void Player::drawInitialHand() {
-    for (int i = 0; i < 5; i++) shuffleAndDraw(false, 12345);
+void Player::drawInitialHand(bool isTestingMode) {
+    for (int i = 0; i < 5; i++) shuffleAndDraw(isTestingMode, 12345);
 }
 
-void Player::playCard(int index, int targetPlayer, int targetCard) {
+void Player::playCard(int index, int targetPlayer, int targetCard, bool isTestingMode) {
     if (index < 1 || index > hand.size()) {
         std::cout << hand.size() << std::endl;
         std::cerr << "Invalid hand index" << std::endl;
         return;
     }
     auto &currentCard = hand[index - 1];
-    if (currentCard->getCost() > magic) {
-        std::cout << "No enough magic " << std::endl;
-        return;
+    if (currentCard->getCost() <= magic) {
+        changeMagic(-currentCard->getCost());
+    } else {
+        if (isTestingMode && currentCard->getType() == CardType::Spell) {
+            changeMagic(-getMagic());
+        } else {
+            std::cout << "No enough magic " << std::endl;
+            return;
+        }
     }
-    changeMagic(-currentCard->getCost());
     switch (currentCard->getType()) {
         case CardType::Minion: {
             if (board.size() >= 5) {
@@ -46,7 +51,7 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
         }
             
         case CardType::Spell: {
-            Spell *spell = dynamic_cast<Spell *>(currentCard.get());
+            Spell *spell = dynamic_cast<Spell*>(currentCard.get());
             spell->effect(game, targetPlayer, targetCard);
             std::cout << name << " played spell: " << spell->getName() << std::endl;
             break;
@@ -66,27 +71,27 @@ void Player::playCard(int index, int targetPlayer, int targetCard) {
     hand.erase(hand.begin() + (index - 1));
 }
 
-void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
-    if (whoAttack < 1 || whoAttack > static_cast<int>(board.size())) {
+void Player::attack(int attackerIdx, int defenserIdx, Player &opponent) {
+    if (attackerIdx < 1 || attackerIdx > static_cast<int>(board.size())) {
         std::cout << "Invalid attacker" << std::endl;
         return;
     }
-    Card *attackCard = board[whoAttack - 1].get();
+    Card *attackCard = board[attackerIdx - 1].get();
     Minion *attacker = dynamic_cast<Minion*>(attackCard);
     if (!attacker->canAct()) {
         std::cout << attacker->getName() << " cannot act" << std::endl;
         return;
     }
     attacker->spendAction();
-    if (whoAttacked == -1) {
+    if (defenserIdx == -1) {
         std::cout << "attacks opponent directly" << std::endl;
         opponent.changeLife(-attacker->getAttack());
     } else {
-        if (whoAttacked < 1 || whoAttacked > static_cast<int>(opponent.board.size())) {
+        if (defenserIdx < 1 || defenserIdx > static_cast<int>(opponent.board.size())) {
             std::cout << "Invalid target minion index" << std::endl;
             return;
         }
-        Card *targetCard = opponent.board[whoAttacked - 1].get();
+        Card *targetCard = opponent.board[defenserIdx - 1].get();
         Minion *target = dynamic_cast<Minion*>(targetCard);
         if (!target) {
             std::cout << "Target card is not a minion" << std::endl;
@@ -97,19 +102,19 @@ void Player::attack(int whoAttack, int whoAttacked, Player &opponent) {
         target->setDefense(target->getDefense() - attacker->getAttack());
 
         if (attacker->getDefense() <= 0) {
-            graveyard.emplace_back(std::move(board[whoAttack - 1]));
-            board.erase(board.begin() + (whoAttack - 1));
+            graveyard.emplace_back(std::move(board[attackerIdx - 1]));
+            board.erase(board.begin() + (attackerIdx - 1));
         }
         if (target->getDefense() <= 0) {
-            opponent.graveyard.emplace_back(std::move(opponent.board[whoAttacked - 1]));
-            opponent.board.erase(opponent.board.begin() + (whoAttacked - 1));
+            opponent.graveyard.emplace_back(std::move(opponent.board[defenserIdx - 1]));
+            opponent.board.erase(opponent.board.begin() + (defenserIdx - 1));
         }
     }
 }
 
 void Player::startTurn() {
     magic++;
-    shuffleAndDraw(false, 12345);
+    drawCard();
     std::cout << name << " starts turn with " << magic << " magic.\n";
 
     for (auto& card : board) {
@@ -151,11 +156,21 @@ Ritual *Player::getRitual() { return dynamic_cast<Ritual *>(ritual.get()); }
 
 void Player::destroyMinion(int index) {
     if (index >= 0 && index < static_cast<int>(board.size())) {
+        std::cout << board[index]->getName() << "died" << std::endl;
         graveyard.emplace_back(std::move(board[index]));
         board.erase(board.begin() + index);
     }
 }
 
 void Player::removeRitual() {
+    std::cout << ritual->getName() << "removed" << std::endl;
     ritual.reset();
+}
+
+void Player::discardCard(int index) {
+    if (index < 1 || index > hand.size()) {
+        std::cerr << "Wrong index" << std::endl;
+    } else {
+        hand.erase(hand.begin() + index - 1);
+    }
 }

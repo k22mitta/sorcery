@@ -20,14 +20,14 @@ void Minion::spendAction() { if (actions > 0) --actions; }
 Ability* Minion::getAbility() { return ability.get(); }
 void Minion::setAbility(std::unique_ptr<Ability> ability) { this -> ability = std::move(ability); }
 
-AirElemental::AirElemental(): Minion{"Air Elemental", 0, "placeholder", 1, 1} {}
-EarthElemental::EarthElemental(): Minion{"Earth Elemental", 3, "placeholder", 4, 4} {}
-BoneGolem::BoneGolem(): Minion{"Bone Golem", 2, "placeholder", 1, 3} {}
-FireElemental::FireElemental(): Minion{"Fire Elemental", 2, "placeholder", 2, 2} {}
-PotionSeller::PotionSeller(): Minion{"Potion Seller", 2, "placeholder", 1, 3} {}
-NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, "placeholder", 0, 1} {}
-ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, "placeholder", 1, 1} {}
-MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, "placeholder", 2, 3} {}
+AirElemental::AirElemental(): Minion{"Air Elemental", 0, "", 1, 1} {}
+EarthElemental::EarthElemental(): Minion{"Earth Elemental", 3, "", 4, 4} {}
+BoneGolem::BoneGolem(): Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion leaves play.", 1, 3} {}
+FireElemental::FireElemental(): Minion{"Fire Elemental", 2, "Whenever an opponent's minion enters play, deal 1 damage to it.", 2, 2} {}
+PotionSeller::PotionSeller(): Minion{"Potion Seller", 2, "At the end of your turn, all your minions gain +0/+1.", 1, 3} {}
+NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, "Deal 1 damage to target minion", 0, 1} {}
+ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, "Summon a 1/1 air elemental", 1, 1} {}
+MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, "Summon up to three 1/1 air elementals", 2, 3} {}
 
 card_template_t Minion::display() const {
     /*

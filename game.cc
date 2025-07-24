@@ -15,6 +15,10 @@ void Game::helpMsg() const {
     std::cout << "          inspect minion -- View a minion's card and all enchantments on that minion." << std::endl;
     std::cout << "          hand -- Describe all cards in your hand." << std::endl;
     std::cout << "          board -- Describe all cards on the board." << std::endl;
+    if (testingMode) {
+        std::cout << "          draw -- draw a card." << std::endl;
+        std::cout << "          discard -- discards the ith card in the player's hand." << std::endl;
+    }
 }
 
 Game::Game(bool testing, bool graphics, std::string deckFile1, std::string deckFile2)
@@ -38,11 +42,10 @@ void Game::init(const std::string &initFile) {
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1), this);
     auto p2 = std::make_unique<Player>(name2, 2, CardFactory::loadDeck(deckFile2), this);
 
-    p1->drawInitialHand();
-    p2->drawInitialHand();
+    p1->drawInitialHand(testingMode);
+    p2->drawInitialHand(testingMode);
 
     board = std::make_unique<Board>(std::move(p1), std::move(p2));
-
 }
 
 void Game::start() {
@@ -68,7 +71,7 @@ void Game::processCommand(const std::string &line) {
     if (cmd == "help") {
         helpMsg();
     } else if (cmd == "end") {
-
+        // placeholder, "end" already processed at Game::start()
     } else if (cmd == "quit") {
         std::exit(EXIT_SUCCESS);
     } else if (cmd == "attack") {
@@ -87,21 +90,29 @@ void Game::processCommand(const std::string &line) {
                     t = -1;
                 }
             }
-            currentPlayer.playCard(i, p, t);
+            currentPlayer.playCard(i, p, t, testingMode);
         }
     } else if (cmd == "inspect") {
 
     } else if (cmd == "hand") {
-        board -> displayHand(currentPlayer);
+        board->displayHand(currentPlayer);
     } else if (cmd == "board") {
-        board -> display();
-    } else {
+        board->display();
+    } else if (testingMode && cmd == "draw") {
+        currentPlayer.drawCard();
+    } else if (testingMode && cmd == "discard") {
+        int i;
+        if (iss >> i) {
+            currentPlayer.discardCard(i);
+        }  
+    }
+    else {
         std::cerr << "Unknown command." << std::endl;
     }
 }
 
-Player &Game::getPlayer(int idx) {
-    return board->getPlayer(idx);
+Player &Game::getPlayer(int index) {
+    return board->getPlayer(index);
 }
 
 Player &Game::getCurrentPlayer() {
