@@ -30,7 +30,9 @@ void Game::init(const std::string &initFile) {
     }
 
     std::string name1, name2;
+    std::cout << "Enter Player 1's name: ";
     std::getline(*in, name1);
+    std::cout << "Enter Player 2's name: ";
     std::getline(*in, name2);
 
     auto p1 = std::make_unique<Player>(name1, 1, CardFactory::loadDeck(deckFile1), this);
