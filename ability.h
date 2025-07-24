@@ -24,7 +24,5 @@ public:
     explicit TriggeredAbility(std::string key) : triggerKey{std::move(key)} {}
     const std::string &key() const { return triggerKey; }
 };
-#endif
-
 
 #endif
