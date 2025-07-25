@@ -23,7 +23,7 @@ class Board {
     void print(const std::vector<card_template_t> &cards, int height) const;
 
 public:
-    Board(std::unique_ptr<Player> p1, std::unique_ptr<Player> p2);
+    Board(Game *g,std::unique_ptr<Player> p1, std::unique_ptr<Player> p2);
 
     Player &getPlayer(int id);
     Player &getOpponent(int id);
