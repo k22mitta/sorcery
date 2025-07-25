@@ -1,6 +1,7 @@
 #include "enchantment.h"
 #include <iostream>
 #include <iomanip>
+using namespace std;
 
 Enchantment::Enchantment(const std::string &name, int cost, std::string description, std::unique_ptr<Minion> target)
     : Minion{name, cost, description, 0, 0}, target{std::move(target)} {}
