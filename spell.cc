@@ -1,6 +1,7 @@
 #include "spell.h"
 #include "game.h"
 #include "ritual.h"
+#include "enchantment.h"
 #include <iostream>
 #include <iomanip>
 
@@ -45,7 +46,16 @@ void Recharge::effect(Game *game, int targetPlayer, int targetCard) {
     }
 }
 void Disenchant::effect(Game *game, int targetPlayer, int targetCard) {
-    // TODO
+    auto &player = game -> getPlayer(targetPlayer);
+    auto &board = player.getBoard();
+    auto &card = board.at(targetCard);
+
+    Enchantment *enchantment = dynamic_cast<Enchantment *>(card.get());
+    if (enchantment) {
+        card = enchantment->copyBase();
+    } else {
+        std::cout << "This minion has no enchantments to remove" << std::endl;
+    }
 }
 void RaiseDead::effect(Game *game, int targetPlayer, int targetCard) {
     auto &player = game -> getPlayer(targetPlayer);

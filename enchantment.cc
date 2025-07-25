@@ -18,8 +18,8 @@ card_template_t Enchantment::display() const {
             getName(),
             getCost(),
             getDescription(),
-            to_string(attack),
-            to_string(defence)
+            std::to_string(attack),
+            std::to_string(defence)
         );
     } else {
         return display_enchantment(
@@ -43,5 +43,9 @@ void Enchantment::setStatModifier(int atkDelta, int defDelta) {
 
 Minion &Enchantment::getBase() {
     return *target;
+}
+
+std::unique_ptr<Minion> Enchantment::copyBase() {
+    return std::move(target);
 }
 
