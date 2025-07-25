@@ -23,6 +23,7 @@ public:
     void setStatModifier(int atkDelta, int defDelta);
 
     Minion &getBase();
+    std::unique_ptr<Minion> copyBase();
 };
 
 #endif
