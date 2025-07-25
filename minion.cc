@@ -2,6 +2,7 @@
 #include "minion_abilities.h"
 #include <iostream>
 #include <iomanip>
+#include "minion_abilities.cc"
 
 Minion::Minion(const std::string &name, int cost, std::string description, int atk, int def)
     : Card{name, cost, description}, atk{atk}, def{def}, actions{0} {}
@@ -60,6 +61,7 @@ MasterSummoner::MasterSummoner()
     setAbility(std::make_unique<MasterSummonerAbility>());
 }
 
+
 card_template_t Minion::display() const {
     /*
     if (ability) {
@@ -71,6 +73,7 @@ card_template_t Minion::display() const {
     return display_minion_no_ability(name, cost, atk, def);
 }
 
+
 /*
 BoneGolem::BoneGolem(): Minion{"Bone Golem", 2, "Gain +1/+1 whenever a minion leaves play.", 1, 3} {}
 FireElemental::FireElemental(): Minion{"Fire Elemental", 2, "Whenever an opponent's minion enters play, deal 1 damage to it.", 2, 2} {}
@@ -79,3 +82,4 @@ NovicePyromancer::NovicePyromancer(): Minion{"Novice Pyromancer", 1, "Deal 1 dam
 ApprenticeSummoner::ApprenticeSummoner(): Minion{"Apprentice Summoner", 1, "Summon a 1/1 air elemental", 1, 1} {}
 MasterSummoner::MasterSummoner(): Minion{"Master Summoner", 3, "Summon up to three 1/1 air elementals", 2, 3} {}
 */
+

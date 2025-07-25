@@ -45,7 +45,7 @@ void Game::init(const std::string &initFile) {
     p1->drawInitialHand(testingMode);
     p2->drawInitialHand(testingMode);
 
-    board = std::make_unique<Board>(std::move(p1), std::move(p2));
+    board = std::make_unique<Board>(this, std::move(p1), std::move(p2));
 }
 
 void Game::start() {
