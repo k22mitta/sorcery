@@ -2,7 +2,7 @@
 #include "ritual.h"
 #include <iostream>
 
-Board::Board(std::unique_ptr<Player> p1, std::unique_ptr<Player> p2)
+Board::Board(Game *game,std::unique_ptr<Player> p1, std::unique_ptr<Player> p2)
     : player1{std::move(p1)}, player2{std::move(p2)} {}
 
 Player &Board::getPlayer(int id) {
@@ -77,3 +77,18 @@ void Board::displayHand(Player& player) const {
 
     print(handGraphics, BLOCK_HEIGHT);
 }
+
+
+void Board::registerListener(const std::string& key, Ability* ability) {
+    listeners.push_back({key, ability});
+}
+
+void Board::notify(const std::string& key, int p, int idx) {
+    for (auto& L : listeners)
+        if (L.key == key) L.cb->execute(*game, p, idx);
+}
+void Board::start_turn()              { notify("StartTurn"); }
+void Board::end_turn()                { notify("EndTurn");   }
+void Board::minion_enter(int p,int i) { notify("MinionEnters", p, i); }
+void Board::minion_leave(int p,int i) { notify("MinionLeaves", p, i); }
+
